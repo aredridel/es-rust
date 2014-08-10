@@ -21,17 +21,6 @@ typedef struct List List;
 typedef struct Binding Binding;
 typedef struct Closure Closure;
 
-struct List {
-	Term *term;
-	List *next;
-};
-
-struct Binding {
-	char *name;
-	List *defn;
-	Binding *next;
-};
-
 struct Closure {
 	Binding	*binding;
 	Tree *tree;

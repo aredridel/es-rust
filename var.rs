@@ -1,5 +1,22 @@
 /* var.c -- es variables ($Revision: 1.1.1.1 $) */
 
+
+use es;
+use list;
+use term;
+use binding;
+
+struct Push {
+	next: Option<Box<Push>>,
+    name: String,
+    defn: Option<Box<list::List>>,
+    flags: es::Flags //,
+    //nameroot: Root,
+    //defnroot: Root
+}
+
+/*
+
 #include "es.h"
 #include "gc.h"
 #include "var.h"
@@ -112,8 +129,14 @@ extern void setnoexport(List *list) {
 		noexport = dictput(noexport, getstr(list->term), (void *) setnoexport);
 	gcenable();
 }
+*/
 
 /* varlookup -- lookup a variable in the current context */
+pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<list::List> {
+    box list::Nil
+}
+
+/*
 extern List *varlookup(const char *name, Binding *bp) {
 	Var *var;
 
@@ -166,6 +189,11 @@ static List *callsettor(char *name, List *defn) {
 	RefReturn(lp);
 }
 
+*/
+
+pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: &list::List) {
+}
+/*
 extern void vardef(char *name, Binding *binding, List *defn) {
 	Var *var;
 
@@ -196,7 +224,31 @@ extern void vardef(char *name, Binding *binding, List *defn) {
 	}
 	RefRemove(name);
 }
+*/
 
+pub fn varpush(name: String, defn: &list::List) -> Push {
+    return Push {
+        name: "".to_string(),
+        next: None,
+        defn: None,
+        flags: es::Flags {
+            run_interactive: true,
+            cmd_stdin: false,
+            cmd: Some("".to_str()),
+            eval_exitonfalse: false,
+            eval_inchild: false,
+            run_noexec: false,
+            run_echoinput: false,
+            run_printcmds: false,
+            loginshell: false,
+            protected: false,
+            keepclosed: false,
+            allowquit: false
+        }
+    };
+}
+
+/*
 extern void varpush(Push *push, char *name, List *defn) {
 	Var *var;
 
@@ -231,7 +283,11 @@ extern void varpush(Push *push, char *name, List *defn) {
 	push->defnroot.p = (void **) &push->defn;
 	rootlist = &push->defnroot;
 }
+*/
 
+pub fn varpop (push: Push) {
+}
+/*
 extern void varpop(Push *push) {
 	Var *var;
 	
@@ -443,3 +499,4 @@ extern void initenv(char **envp, Boolean protected) {
 	envmin = env->count;
 	efree(buf);
 }
+*/

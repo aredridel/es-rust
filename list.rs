@@ -1,14 +1,29 @@
-/* list.c -- operations on lists ($Revision: 1.1.1.1 $) */
+/* list.c -- operations on lists */
 
-#include "es.h"
-#include "gc.h"
+extern crate libc;
+
+use term;
+
+pub enum List {
+    Cons(term::Term, Box<List>),
+    Nil,
+}
 
 /*
  * allocation and garbage collector support
  */
 
+/*
 DefineTag(List, static);
+*/
 
+pub fn mklist(term: term::Term, next: Option<List>) -> Box<List> {
+    return box Cons(term, match next {
+        None => { box Nil }
+        Some(fol) => { box fol }
+    });
+}
+/*
 extern List *mklist(Term *term, List *next) {
 	gcdisable();
 	assert(term != NULL);
@@ -86,8 +101,12 @@ extern int length(List *list) {
 		++len;
 	return len;
 }
-
+*/
 /* listify -- turn an argc/argv vector into a list */
+pub fn listify(argv: Vec<String>) -> Box<List> {
+    box Nil
+}
+/*
 extern List *listify(int argc, char **argv) {
 	Ref(List *, list, NULL);
 	while (argc > 0) {
@@ -121,3 +140,4 @@ extern List *sortlist(List *list) {
 	}
 	return list;
 }
+*/

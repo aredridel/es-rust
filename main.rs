@@ -5,8 +5,14 @@ extern crate libc;
 use getopts::{optopt,optflag,getopts,usage};
 use std::os;
 use std::io;
+mod es;
+mod list;
+mod binding;
+mod term;
 mod fd;
+mod input;
 mod status;
+mod var;
 
 /* checkfd -- open /dev/null on an fd if it is closed */
 fn checkfd(fd: i32, r: i32) {
@@ -29,12 +35,12 @@ static void initpath(void) {
 	int i;
 	static const char * const path[] = { INITIAL_PATH };
 	
-	Ref(List *, list, NULL);
+	Ref(List *, list, None);
 	for (i = arraysize(path); i-- > 0;) {
 		Term *t = mkstr((char *) path[i]);
 		list = mklist(t, list);
 	}
-	vardef("path", NULL, list);
+	vardef("path", None, list);
 	RefEnd(list);
 }
 */
@@ -42,14 +48,14 @@ static void initpath(void) {
 /* initpid -- set $pid for this shell */
 /*
 static void initpid(void) {
-	vardef("pid", NULL, mklist(mkstr(str("%d", getpid())), NULL));
+	vardef("pid", None, mklist(mkstr(str("%d", getpid())), None));
 }
 */
 
 /* runesrc -- run the user's profile, if it exists */
 /*
 static void runesrc(void) {
-	char *esrc = str("%L/.esrc", varlookup("home", NULL), "\001");
+	char *esrc = str("%L/.esrc", varlookup("home", None), "\001");
 	int fd = eopen(esrc, oOpen);
 	if (fd != -1) {
 		ExceptionHandler
@@ -59,7 +65,7 @@ static void runesrc(void) {
 				exit(status::exitstatus(e->next));
 			else if (termeq(e->term, "error"))
 				eprint("%L\n",
-				       e->next == NULL ? NULL : e->next->next,
+				       e->next == None ? None : e->next->next,
 				       " ");
 			else if (!issilentsignal(e))
 				eprint("uncaught exception: %L\n", e, " ");
@@ -71,6 +77,35 @@ static void runesrc(void) {
 
 /* main -- initialize, parse command arguments, and start running */
 fn main() {
+    let mut input: Box<input::Input> = box input::Input {
+        prev: None,
+        name: None,
+        /*
+        buf: &0,
+        bufend: &0,
+        bufbegin: &0,
+        rbuf: &0,
+        buflen: 0,
+        unget: [0, 0],
+        ungot: 0,
+        */
+        lineno: 0,
+        fd: 0,
+        runflags: es::Flags {
+            run_interactive: true,
+            cmd_stdin: false,
+            cmd: Some("".to_str()),
+            eval_exitonfalse: false,
+            eval_inchild: false,
+            run_noexec: false,
+            run_echoinput: false,
+            run_printcmds: false,
+            loginshell: false,
+            protected: false,
+            keepclosed: false,
+            allowquit: false
+        }
+    };
     let mut args: Vec<String> = os::args();
 
 	let runflags = 0i;		/* -[einvxL] */
@@ -79,7 +114,6 @@ fn main() {
 	let cmd_stdin = false;		/* -s */
     let mut loginshell = false;	/* -l or $0[0] == '-' */
 	let keepclosed = false;		/* -o */
-    let cmd = ""; /* -c */
 
     /*
 	initgc();
@@ -112,41 +146,22 @@ fn main() {
         Err(f) => { fail!(f.to_str()) }
     };
 
-    /*
-	while ((c = getopt(argc, argv, "eilxvnpodsc:?GIL")) != EOF)
-		switch (c) {
-		case 'l':	loginshell = TRUE;		break;
-		case 'p':	protected = TRUE;		break;
-		case 'o':	keepclosed = TRUE;		break;
-		case 'd':	allowquit = TRUE;		break;
-		case 's':	cmd_stdin = TRUE;			goto getopt_done;
-#if GCVERBOSE
-		case 'G':	gcverbose = TRUE;		break;
-#endif
-#if GCINFO
-		case 'I':	gcinfo = TRUE;			break;
-#endif
-		default:
-			usage();
-		}
+    let mut runflags = es::Flags {
+        cmd_stdin: realopts.opt_present("s"), // Stop processing, this is broken
+        cmd: realopts.opt_str("c"),
+        eval_inchild: false,
+        eval_exitonfalse: realopts.opt_present("e"),
+        run_interactive: realopts.opt_present("i"),
+        run_noexec: realopts.opt_present("n"),
+        run_echoinput: realopts.opt_present("v"),
+        run_printcmds: realopts.opt_present("x"),
+        loginshell: realopts.opt_present("l"),
+        protected: realopts.opt_present("p"),
+        keepclosed: realopts.opt_present("o"),
+        allowquit: realopts.opt_present("d")
+    };
 
-getopt_done:
-
-    */
-
-    let cmd_stdin = realopts.opt_present("s"); // Stop processing, this is broken
-    let cmd = realopts.opt_str("c");
-    let eval_exitonfalse = realopts.opt_present("e");
-    let mut run_interactive = realopts.opt_present("i");
-    let run_noexec = realopts.opt_present("n");
-    let run_echoinput = realopts.opt_present("v");
-    let run_printcmds = realopts.opt_present("x");
-    let loginshell = realopts.opt_present("l");
-    let protected = realopts.opt_present("p");
-    let keepclosed = realopts.opt_present("o");
-    let allowquit = realopts.opt_present("d");
-
-    if cmd_stdin && !cmd.is_none() {
+    if runflags.cmd_stdin && !runflags.cmd.is_none() {
 		fail!("es: -s and -c are incompatible\n");
 	}
 
@@ -165,62 +180,73 @@ getopt_done:
 		checkfd(2, libc::O_CREAT);
 	}
 
-
-	if cmd.is_none() && (realopts.free.len() == 0 || cmd_stdin) && !run_interactive && unsafe { libc::isatty(0) != 0 } {
-		run_interactive = true;
+	if runflags.cmd.is_none() && (realopts.free.len() == 0 || cmd_stdin) && !runflags.run_interactive && unsafe { libc::isatty(0) != 0 } {
+		runflags.run_interactive = true;
     }
 
-	let result = try!({
-		roothandler = &_localhandler;	/* unhygeinic */
+	let result = {
+		//roothandler = &_localhandler;	/* unhygeinic */
 
-		initinput();
-		initprims();
-		initvars();
+        /*
+		input::initinput();
+		prim::initprims();
+		var::initvars();
 	
-		runinitial();
+		dump::runinitial();
 	
 		initpath();
 		initpid();
-		initsignals(runflags & run_interactive, allowquit);
-		hidevariables();
-		initenv(environ, protected);
+		signal::initsignals(runflags & run_interactive, allowquit);
+		var::hidevariables();
+		var::initenv(environ, protected);
+        */
 	
 		if loginshell {
-			runesrc();
+			// runesrc();
         }
 	
-		if cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
-            let file = realopts.free[0];
-			if ((fd = eopen(file, oOpen)) == -1) {
-				eprint("%s: %s\n", file, esstrerror(errno));
-				return 1;
+		if runflags.cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
+            let file = realopts.free.get(0);
+            let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY) }) };
+			if (fd == -1) {
+                let mut stderr = io::stderr();
+				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(os::errno() as i32 )});
+                os::set_exit_status(1);
+				return;
 			}
-			vardef("*", NULL, listify(ac - optind, av + optind));
-			vardef("0", NULL, mklist(mkstr(file), NULL));
-			return status::exitstatus(runfd(fd, file, runflags));
+			var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+			var::vardef("0".to_string(), None, list::mklist(term::Term { str: file.clone() }, None));
+			os::set_exit_status( status::exitstatus(input::runfd(fd, Some(file.clone()), &mut runflags)));
+            return;
 		}
 	
-		vardef("*", NULL, listify(ac - optind, av + optind));
-		vardef("0", NULL, mklist(mkstr(av[0]), NULL));
-		return status::exitstatus(if !cmd.is_none() {
-			runstring(cmd, NULL, runflags)
-        } else {
-            runfd(0, "stdin", runflags)
-        });
+		var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::os::args().get(0).to_string() }, None));
 
-    });
+		status::exitstatus(match runflags.cmd.clone() {
+            Some(cmd) => {
+                input::runstring(cmd, None, runflags)
+            }
+            None => {
+                input::runfd(0, Some("stdin".to_string()), &mut runflags)
+            }
+        })
+    };
 
-    if result.is_err() {
+    if result > 0 {
         /*
 		if (termeq(e->term, "exit"))
 			return status::exitstatus(e->next);
 		else if (termeq(e->term, "error"))
 			eprint("%L\n",
-			       e->next == NULL ? NULL : e->next->next,
+			       e->next == None ? None : e->next->next,
 			       " ");
 		else if (!issilentsignal(e))
 			eprint("uncaught exception: %L\n", e, " ");
             */
-		return 1;
+
+        os::set_exit_status(result);
+    } else {
+        os::set_exit_status(result);
     }
 }
