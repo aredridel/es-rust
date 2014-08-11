@@ -13,6 +13,7 @@ mod fd;
 mod input;
 mod status;
 mod var;
+mod prim;
 
 /* checkfd -- open /dev/null on an fd if it is closed */
 fn checkfd(fd: i32, r: i32) {
@@ -187,9 +188,8 @@ fn main() {
 	let result = {
 		//roothandler = &_localhandler;	/* unhygeinic */
 
-        /*
-		input::initinput();
 		prim::initprims();
+        /*
 		var::initvars();
 	
 		dump::runinitial();

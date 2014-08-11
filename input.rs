@@ -556,31 +556,4 @@ extern Tree *parsestring(const char *str) {
 extern Boolean isinteractive(void) {
 	return input == None ? FALSE : ((input->runflags & run_interactive) != 0);
 }
-
-
-/*
- * initialization
- */
-
-/* initinput -- called at dawn of time from main() */
-extern void initinput(void) {
-	input = None;
-	HistEvent ev;
-	memzero(&ev, sizeof (HistEvent));
-
-	/* declare the global roots */
-	globalroot(&histfile);		/* history file */
-	globalroot(&error);		/* parse errors */
-	globalroot(&prompt);		/* main prompt */
-	globalroot(&prompt2);		/* secondary prompt */
-
-	/* call the parser's initialization */
-	initparse();
-
-	el = el_init("es", stdin, stdout, stderr);
-	el_set(el, EL_PROMPT, getprompt);
-	hist = history_init();
-	history(hist, &ev, H_SETSIZE, 100);
-	el_set(el, EL_HIST, history, hist);
-}
 */
