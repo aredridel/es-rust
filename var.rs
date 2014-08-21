@@ -5,6 +5,7 @@ use es;
 use list;
 use term;
 use binding;
+use std::collections::{TreeMap,TreeSet};
 
 struct Push {
 	next: Option<Box<Push>>,
@@ -394,23 +395,25 @@ static void hide(void *dummy, char *key, void *value) {
 extern void hidevariables(void) {
 	dictforall(vars, hide, NULL);
 }
+*/
 
-/* initvars -- initialize the variable machinery */
-extern void initvars(void) {
-	globalroot(&vars);
-	globalroot(&noexport);
-	globalroot(&env);
-	globalroot(&sortenv);
-	vars = mkdict();
-	noexport = NULL;
-	env = mkvector(10);
-#if ABUSED_GETENV
-# if READLINE
-	initgetenv();
-# endif
-#endif
+pub struct Vars {
+	env: Box<Vec<int>>
 }
 
+impl Vars {
+	/* initvars -- initialize the variable machinery */
+	pub fn initvars(&self) {
+		let vars:TreeMap<String, String> = TreeMap::new();
+		let noexport:TreeSet<String> = TreeSet::new();
+	}
+
+	pub fn new() -> Vars {
+		return Vars { env: box vec![] }
+	}
+}
+
+/*
 /* importvar -- import a single environment variable */
 static void importvar(char *name0, char *value) {
 	char sep[2] = { ENV_SEPARATOR, '\0' };

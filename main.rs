@@ -189,8 +189,10 @@ fn main() {
 		//roothandler = &_localhandler;	/* unhygeinic */
 
 		prim::initprims();
+
+		let vars = var::Vars::new();
+		vars.initvars();
         /*
-		var::initvars();
 	
 		dump::runinitial();
 	
