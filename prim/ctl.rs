@@ -1,8 +1,7 @@
-/* prim-ctl.c -- control flow primitives ($Revision: 1.1.1.1 $) */
+/* prim-ctl.rs -- control flow primitives */
+use std::collections::{TreeMap};
 
-#include "es.h"
-#include "prim.h"
-
+/*
 PRIM(seq) {
 	Ref(List *, result, true);
 	Ref(List *, lp, list);
@@ -92,10 +91,15 @@ PRIM(catch) {
 }
 
 extern Dict *initprims_controlflow(Dict *primdict) {
+}
+*/
+
+pub fn initprims_controlflow(prims: &TreeMap<String, String>) {
+    /*
 	X(seq);
 	X(if);
 	X(throw);
 	X(forever);
 	X(catch);
-	return primdict;
+    */
 }
