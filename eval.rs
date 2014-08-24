@@ -1,8 +1,6 @@
-/* eval.c -- evaluation of lists and trees ($Revision: 1.2 $) */
+/* eval.rs -- evaluation of lists and trees */
 
-#include "es.h"
-#include "term.h"
-
+/*
 unsigned long evaldepth = 0, maxevaldepth = MAXmaxevaldepth;
 
 static noreturn failexec(char *file, List *args) {
@@ -22,8 +20,10 @@ static noreturn failexec(char *file, List *args) {
 	eprint("%s: %s\n", file, esstrerror(errno));
 	exit(1);
 }
+*/
 
 /* forkexec -- fork (if necessary) and exec */
+/*
 extern List *forkexec(char *file, List *list, Boolean inchild) {
 	int pid, status;
 	Vector *env;
@@ -45,8 +45,10 @@ extern List *forkexec(char *file, List *list, Boolean inchild) {
 	printstatus(pid, status);
 	return mklist(mkterm(mkstatus(status), NULL), NULL);
 }
+*/
 
 /* assign -- bind a list of values to a list of variables */
+/*
 static List *assign(Tree *varform, Tree *valueform0, Binding *binding0) {
 	Ref(List *, result, NULL);
 
@@ -79,8 +81,10 @@ static List *assign(Tree *varform, Tree *valueform0, Binding *binding0) {
 	RefEnd4(values, vars, binding, valueform);
 	RefReturn(result);
 }
+*/
 
 /* letbindings -- create a new Binding containing let-bound variables */
+/*
 static Binding *letbindings(Tree *defn0, Binding *outer0,
 			    Binding *context0, int evalflags) {
 	Ref(Binding *, binding, outer0);
@@ -122,8 +126,10 @@ static Binding *letbindings(Tree *defn0, Binding *outer0,
 	RefEnd2(defn, context);
 	RefReturn(binding);
 }
+*/
 
 /* localbind -- recursively convert a Bindings list into dynamic binding */
+/*
 static List *localbind(Binding *dynamic0, Binding *lexical0,
 		       Tree *body0, int evalflags) {
 	if (dynamic0 == NULL)
@@ -143,8 +149,10 @@ static List *localbind(Binding *dynamic0, Binding *lexical0,
 		RefReturn(result);
 	}
 }
+*/
 	
 /* local -- build, recursively, one layer of local assignment */
+/*
 static List *local(Tree *defn, Tree *body0,
 		   Binding *bindings0, int evalflags) {
 	Ref(List *, result, NULL);
@@ -158,8 +166,10 @@ static List *local(Tree *defn, Tree *body0,
 	RefEnd3(dynamic, bindings, body);
 	RefReturn(result);
 }
+*/
 
 /* forloop -- evaluate a for loop */
+/*
 static List *forloop(Tree *defn0, Tree *body0,
 		     Binding *binding, int evalflags) {
 	static List MULTIPLE = { NULL, NULL };
@@ -233,8 +243,10 @@ static List *forloop(Tree *defn0, Tree *body0,
 	RefEnd3(body, looping, outer);
 	RefReturn(result);
 }
+*/
 
 /* matchpattern -- does the text match a pattern? */
+/*
 static List *matchpattern(Tree *subjectform0, Tree *patternform0,
 			  Binding *binding) {
 	Boolean result;
@@ -248,8 +260,10 @@ static List *matchpattern(Tree *subjectform0, Tree *patternform0,
 	RefEnd3(subject, patternform, bp);
 	return result ? true : false;
 }
+*/
 
 /* extractpattern -- Like matchpattern, but returns matches */
+/*
 static List *extractpattern(Tree *subjectform0, Tree *patternform0,
 			    Binding *binding) {
 	List *pattern;
@@ -263,8 +277,10 @@ static List *extractpattern(Tree *subjectform0, Tree *patternform0,
 	RefEnd3(subject, patternform, bp);
 	RefReturn(result);
 }
+*/
 
 /* walk -- walk through a tree, evaluating nodes */
+/*
 extern List *walk(Tree *tree0, Binding *binding0, int flags) {
 	Tree *volatile tree = tree0;
 	Binding *volatile binding = binding0;
@@ -315,8 +331,10 @@ top:
 	}
 	NOTREACHED;
 }
+*/
 
 /* bindargs -- bind an argument list to the parameters of a lambda */
+/*
 extern Binding *bindargs(Tree *params, List *args, Binding *binding) {
 	if (params == NULL)
 		return mkbinding("*", args, binding);
@@ -345,8 +363,10 @@ extern Binding *bindargs(Tree *params, List *args, Binding *binding) {
 	gcenable();
 	RefReturn(result);
 }
+*/
 
 /* pathsearch -- evaluate fn %pathsearch + some argument */
+/*
 extern List *pathsearch(Term *term) {
 	List *search, *list;
 	search = varlookup("fn-%pathsearch", NULL);
@@ -355,8 +375,10 @@ extern List *pathsearch(Term *term) {
 	list = mklist(term, NULL);
 	return eval(append(search, list), NULL, 0);
 }
+*/
 
 /* eval -- evaluate a list, producing a list */
+/*
 extern List *eval(List *list0, Binding *binding0, int flags) {
 	Closure *volatile cp;
 	List *fn;
@@ -464,8 +486,11 @@ done:
 	RefEnd2(funcname, binding);
 	RefReturn(list);
 }
+*/
 
 /* eval1 -- evaluate a term, producing a list */
+/*
 extern List *eval1(Term *term, int flags) {
 	return eval(mklist(term, NULL), NULL, flags);
 }
+*/

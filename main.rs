@@ -14,6 +14,7 @@ mod input;
 mod status;
 mod var;
 mod prim;
+mod eval;
 
 /* checkfd -- open /dev/null on an fd if it is closed */
 fn checkfd(fd: i32, r: i32) {
