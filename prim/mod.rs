@@ -29,8 +29,8 @@ PRIM(primitives) {
 mod ctl;
 
 pub fn initprims() {
-    let prims:TreeMap<String, String> = TreeMap::new();
-	ctl::initprims_controlflow(&prims);
+    let mut prims:TreeMap<String, |&::list::List| -> ::list::List> = TreeMap::new();
+	ctl::initprims_controlflow(&mut prims);
 /*
 	prims = initprims_io(prims);
 	prims = initprims_etc(prims);
