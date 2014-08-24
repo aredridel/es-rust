@@ -1,13 +1,17 @@
 /* prim-ctl.rs -- control flow primitives */
 use std::collections::{TreeMap};
 
-fn seq(lp: &::list::List) -> ::list::List {
-    /*
-	for (; l != NULL; l = lp->next)
-		result = eval1(lp->term, evalflags &~ (lp->next == NULL ? 0 : eval_inchild));
-    */
+fn seq(lp: &::list::List/*, binding: &Binding, evalflags: int*/) -> ::list::List {
+    match *lp {
+        ::list::Cons(ref l, box ref next) => {
+            /* result = eval1(lp->term, evalflags &~ (lp->next == NULL ? 0 : eval_inchild)); */
+            return seq(next);
+        },
+        ::list::Nil => {
+            return ::list::Nil;
+        }
+    }
 
-    return ::list::Nil;
 }
 
 fn _if(lp: &::list::List) -> ::list::List {
