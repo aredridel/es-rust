@@ -22,7 +22,7 @@ fn checkfd(fd: i32, r: u16) {
         let new = libc::dup(fd);
         if new != -1 {
             libc::close(new);
-        } else if os::errno() == libc::EBADF as int{
+        } else if os::errno() == libc::EBADF as int {
             let null = "/dev/null".with_c_str(|path| libc::open(path, 0, r));
             if null != -1i32 {
                 fd::mvfd(new, fd);
