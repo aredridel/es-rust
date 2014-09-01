@@ -380,7 +380,6 @@ extern List *pathsearch(Term *term) {
 /* eval -- evaluate a list, producing a list */
 pub fn eval(list0: &::list::List, binding0: Option<::binding::Binding>, flags: int) -> ::list::List {
 /*
-extern List *eval(List *list0, Binding *binding0, int flags) {
 	Closure *volatile cp;
 	List *fn;
 
