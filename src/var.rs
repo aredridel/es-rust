@@ -192,7 +192,7 @@ static List *callsettor(char *name, List *defn) {
 
 */
 
-pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: &list::List) {
+pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<list::List>) {
 }
 /*
 extern void vardef(char *name, Binding *binding, List *defn) {
@@ -227,7 +227,7 @@ extern void vardef(char *name, Binding *binding, List *defn) {
 }
 */
 
-pub fn varpush(name: String, defn: &list::List) -> Push {
+pub fn varpush(name: String, defn: Box<list::List>) -> Push {
     return Push {
         name: "".to_string(),
         next: None,
@@ -235,7 +235,7 @@ pub fn varpush(name: String, defn: &list::List) -> Push {
         flags: es::Flags {
             run_interactive: true,
             cmd_stdin: false,
-            cmd: Some("".to_str()),
+            cmd: Some("".to_string()),
             eval_exitonfalse: false,
             eval_inchild: false,
             run_noexec: false,

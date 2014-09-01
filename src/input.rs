@@ -14,10 +14,10 @@ pub struct Input {
 	pub prev: Option<Box<Input>>,
 	pub name: Option<String>,
     /*
-    buf: *libc::c_char,
-    bufend: *libc::c_char,
-    bufbegin: *libc::c_char,
-    rbuf: *libc::c_char,
+    buf: *mut libc::c_char,
+    bufend: *mut libc::c_char,
+    bufbegin: *mut libc::c_char,
+    rbuf: *mut libc::c_char,
     buflen: libc::size_t,
     unget: [int, ..2],
     ungot: int,
@@ -352,7 +352,7 @@ pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::Lis
 	//inp.prev = Some(input);
 
     match {
-		let mut dispatch = var::varlookup(dispatcher[if runflags.run_printcmds { 1 } else { 0 } + if runflags.run_noexec { 2 } else { 0 }].to_str(), &None);
+		let mut dispatch = var::varlookup(dispatcher[if runflags.run_printcmds { 1 } else { 0 } + if runflags.run_noexec { 2 } else { 0 }].to_string(), &None);
 
         match *dispatch {
             list::Nil => {
@@ -362,11 +362,11 @@ pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::Lis
         }
 
 		if runflags.eval_exitonfalse {
-			dispatch = list::mklist(term::Term { str: "%exit-on-false".to_str() }, Some(*dispatch));
+			dispatch = list::mklist(term::Term { str: "%exit-on-false".to_string() }, Some(*dispatch));
         }
-		let push = var::varpush("fn-%dispatch".to_str(), dispatch);
+		let push = var::varpush("fn-%dispatch".to_string(), dispatch);
 	
-		let repl = var::varlookup( if runflags.run_interactive { "fn-%interactive-loop" } else { "fn-%batch-loop" }.to_str(), &None);
+		let repl = var::varlookup( if runflags.run_interactive { "fn-%interactive-loop" } else { "fn-%batch-loop" }.to_string(), &None);
 		let result = match *repl {
             list::Nil => {
                 Err("")
@@ -428,7 +428,7 @@ pub fn runfd(fd: i32, name: Option<String>, runflags: &mut es::Flags) -> Box<lis
         runflags: es::Flags {
             run_interactive: true,
             cmd_stdin: false,
-            cmd: Some("".to_str()),
+            cmd: Some("".to_string()),
             eval_exitonfalse: false,
             eval_inchild: false,
             run_noexec: false,

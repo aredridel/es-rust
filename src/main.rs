@@ -17,13 +17,13 @@ mod prim;
 mod eval;
 
 /* checkfd -- open /dev/null on an fd if it is closed */
-fn checkfd(fd: i32, r: i32) {
+fn checkfd(fd: i32, r: u16) {
     unsafe {
         let new = libc::dup(fd);
         if new != -1 {
             libc::close(new);
         } else if os::errno() == libc::EBADF as int{
-            let null = "/dev/null".with_c_str(|path| libc::open(path, 0, r as libc::c_int));
+            let null = "/dev/null".with_c_str(|path| libc::open(path, 0, r));
             if null != -1i32 {
                 fd::mvfd(new, fd);
             }
@@ -96,7 +96,7 @@ fn main() {
         runflags: es::Flags {
             run_interactive: true,
             cmd_stdin: false,
-            cmd: Some("".to_str()),
+            cmd: Some("".to_string()),
             eval_exitonfalse: false,
             eval_inchild: false,
             run_noexec: false,
@@ -145,7 +145,7 @@ fn main() {
 
     let realopts = match getopts(args.tail(), opts) {
         Ok(m) => { m }
-        Err(f) => { fail!(f.to_str()) }
+        Err(f) => { fail!(f.to_string()) }
     };
 
     let mut runflags = es::Flags {
@@ -177,9 +177,9 @@ fn main() {
     b0rk(usage("es [options] [file [args...]]", opts));
 
 	if !keepclosed {
-		checkfd(0, 0);
-		checkfd(1, libc::O_CREAT);
-		checkfd(2, libc::O_CREAT);
+		checkfd(0i32, 0);
+		checkfd(1i32, libc::O_CREAT as u16);
+		checkfd(2i32, libc::O_CREAT as u16);
 	}
 
 	if runflags.cmd.is_none() && (realopts.free.len() == 0 || cmd_stdin) && !runflags.run_interactive && unsafe { libc::isatty(0) != 0 } {
@@ -210,7 +210,7 @@ fn main() {
 	
 		if runflags.cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
             let file = realopts.free.get(0);
-            let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY) }) };
+            let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY as u16) }) };
 			if fd == -1 {
                 let mut stderr = io::stderr();
 				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(os::errno() as i32 )});
