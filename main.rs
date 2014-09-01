@@ -211,7 +211,7 @@ fn main() {
 		if runflags.cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
             let file = realopts.free.get(0);
             let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY) }) };
-			if (fd == -1) {
+			if fd == -1 {
                 let mut stderr = io::stderr();
 				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(os::errno() as i32 )});
                 os::set_exit_status(1);
