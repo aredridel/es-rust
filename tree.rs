@@ -1,8 +1,6 @@
-/* tree.c -- functions for manipulating parse-trees. (create, copy, scan) ($Revision: 1.1.1.1 $) */
+/* tree.rs -- functions for manipulating parse-trees. (create, copy, scan) */
 
-#include "es.h"
-#include "gc.h"
-
+/*
 DefineTag(Tree1, static);
 DefineTag(Tree2, static);
 
@@ -49,6 +47,7 @@ extern Tree *mk VARARGS1(NodeKind, t) {
 	gcenable();
 	RefReturn(tree);
 }
+*/
 
 
 /*
@@ -57,6 +56,7 @@ extern Tree *mk VARARGS1(NodeKind, t) {
  *	the type to figure out size.
  */
 
+/*
 static void *Tree1Copy(void *op) {
 	void *np = gcalloc(offsetof(Tree, u[1]), &Tree1Tag);
 	memcpy(np, op, offsetof(Tree, u[1]));
@@ -98,3 +98,4 @@ static size_t Tree2Scan(void *p) {
 	} 
 	return offsetof(Tree, u[2]);
 }
+*/
