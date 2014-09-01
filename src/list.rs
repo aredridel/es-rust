@@ -1,4 +1,4 @@
-/* list.c -- operations on lists */
+/* list.rs -- operations on lists */
 
 extern crate libc;
 

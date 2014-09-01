@@ -1,4 +1,4 @@
-/* main.rs -- initialization for es ($Revision: 1.3 $) */
+/* main.rs -- initialization for es */
 
 extern crate getopts;
 extern crate libc;
