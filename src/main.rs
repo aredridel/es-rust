@@ -79,43 +79,21 @@ static void runesrc(void) {
 
 /* main -- initialize, parse command arguments, and start running */
 fn main() {
-    let mut input: Box<input::Input> = box input::Input {
-        prev: None,
-        name: None,
-        /*
-        buf: &0,
-        bufend: &0,
-        bufbegin: &0,
-        rbuf: &0,
-        buflen: 0,
-        unget: [0, 0],
-        ungot: 0,
-        */
-        lineno: 0,
-        fd: 0,
-        runflags: es::Flags {
-            run_interactive: true,
-            cmd_stdin: false,
-            cmd: Some("".to_string()),
-            eval_exitonfalse: false,
-            eval_inchild: false,
-            run_noexec: false,
-            run_echoinput: false,
-            run_printcmds: false,
-            loginshell: false,
-            protected: false,
-            keepclosed: false,
-            allowquit: false
-        }
+    let mut runflags = es::Flags {
+        run_interactive: true,
+        cmd_stdin: false,
+        cmd: Some("".to_string()),
+        eval_exitonfalse: false,
+        eval_inchild: false,
+        run_noexec: false,
+        run_echoinput: false,
+        run_printcmds: false,
+        loginshell: false,
+        protected: false,
+        keepclosed: false,
+        allowquit: false
     };
     let mut args: Vec<String> = os::args();
-
-	let runflags = 0i;		/* -[einvxL] */
-	let protected = false;	/* -p */
-	let allowquit = false;	/* -d */
-	let cmd_stdin = false;		/* -s */
-    let mut loginshell = false;	/* -l or $0[0] == '-' */
-	let keepclosed = false;		/* -o */
 
     /*
 	initgc();
@@ -126,7 +104,7 @@ fn main() {
         args = vec!("es".to_string());
 	}
 	if args[0].as_slice() == "-" {
-		loginshell = true;
+		runflags.loginshell = true;
     }
 
     let opts = [
@@ -176,13 +154,13 @@ fn main() {
 
     b0rk(usage("es [options] [file [args...]]", opts));
 
-	if !keepclosed {
+	if !runflags.keepclosed {
 		checkfd(0i32, 0);
 		checkfd(1i32, libc::O_CREAT as u16);
 		checkfd(2i32, libc::O_CREAT as u16);
 	}
 
-	if runflags.cmd.is_none() && (realopts.free.len() == 0 || cmd_stdin) && !runflags.run_interactive && unsafe { libc::isatty(0) != 0 } {
+	if runflags.cmd.is_none() && (realopts.free.len() == 0 || runflags.cmd_stdin) && !runflags.run_interactive && unsafe { libc::isatty(0) != 0 } {
 		runflags.run_interactive = true;
     }
 
@@ -204,11 +182,11 @@ fn main() {
 		var::initenv(environ, protected);
         */
 	
-		if loginshell {
+		if runflags.loginshell {
 			// runesrc();
         }
 	
-		if runflags.cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
+		if runflags.cmd.is_none() && !runflags.cmd_stdin && realopts.free.len() > 0 {
             let ref file = realopts.free[0];
             let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY as u16) }) };
 			if fd == -1 {
