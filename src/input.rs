@@ -30,6 +30,7 @@ pub struct Input {
 impl Input {
     /* fdfill -- fill input buffer by reading from a file descriptor */
     fn fdfill() {
+        unimplemented!();
         /*
         int nread;
         static const char *lastinbuf = None;
@@ -86,6 +87,7 @@ impl Input {
 
     /* fdcleanup -- cleanup after running from a file descriptor */
     fn fdcleanup() {
+        unimplemented!();
         /*
         unregisterfd(&in->fd);
         if (in->fd != -1)
@@ -98,7 +100,7 @@ impl Input {
 impl Input {
     fn get (&self) -> i8 {
         if (self.runflags.run_echoinput) {
-            return 0i8;
+            unimplemented!();
             /*
             if (in->fill == ungetfill)
                 return get(in);
@@ -112,7 +114,7 @@ impl Input {
             }
             */
         } else {
-            return 0i8;
+            unimplemented!();
             /*
             int c;
             while ((c = (in->buf < in->bufend ? *in->buf++ : (*in->fill)(in))) == '\0')
