@@ -93,16 +93,18 @@ fn main() {
         keepclosed: false,
         allowquit: false
     };
-    let mut args: Vec<String> = os::args();
+
+    let t = os::args();
+    let args = match t.as_slice() {
+        [] => vec!("es".to_string()),
+        _ => t
+    };
 
     /*
 	initgc();
 	initconv();
     */
 
-	if args.len() == 0 {
-        args = vec!("es".to_string());
-	}
 	if args[0].as_slice() == "-" {
 		runflags.loginshell = true;
     }
