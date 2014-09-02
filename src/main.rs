@@ -125,7 +125,7 @@ fn main() {
 	if args.len() == 0 {
         args = vec!("es".to_string());
 	}
-	if args.get(0).as_slice() == "-" {
+	if args[0].as_slice() == "-" {
 		loginshell = true;
     }
 
@@ -209,7 +209,7 @@ fn main() {
         }
 	
 		if runflags.cmd.is_none() && !cmd_stdin && realopts.free.len() > 0 {
-            let file = realopts.free.get(0);
+            let ref file = realopts.free[0];
             let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY as u16) }) };
 			if fd == -1 {
                 let mut stderr = io::stderr();
@@ -224,7 +224,7 @@ fn main() {
 		}
 	
 		var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::os::args().get(0).to_string() }, None));
+		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::os::args()[0].to_string() }, None));
 
 		status::exitstatus(match runflags.cmd.clone() {
             Some(cmd) => {
