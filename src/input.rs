@@ -28,10 +28,70 @@ pub struct Input {
 }
 
 impl Input {
+    /* fdfill -- fill input buffer by reading from a file descriptor */
     fn fdfill() {
+        /*
+        int nread;
+        static const char *lastinbuf = None;
+        Boolean dolog;
+        HistEvent ev;
+        int editing;
+        memzero(&ev, sizeof(HistEvent));
+        assert(in->buf == in->bufend);
+        assert(in->fd >= 0);
+
+        el_get(el, EL_EDITMODE, &editing);
+        if (in->runflags & run_interactive && in->fd == 0 && editing) {
+            const char *rlinebuf = callreadline(prompt, &nread);
+            dolog = FALSE;
+            if (rlinebuf == None)
+                nread = 0;
+            else {
+                if (in->buflen < nread) {
+                    while (in->buflen < nread)
+                        in->buflen *= 2;
+                    efree(in->bufbegin);
+                    in->bufbegin = erealloc(in->bufbegin, in->buflen);
+                }
+                memcpy(in->bufbegin, rlinebuf, nread - 1);
+                in->bufbegin[nread - 1] = '\n';
+                history(hist, &ev, prompt == prompt2 ? H_ADD : H_ENTER, rlinebuf);
+                lastinbuf = rlinebuf;
+            }
+        } else
+        do {
+            nread = eread(in->fd, (char *) in->bufbegin, in->buflen);
+            SIGCHK();
+        } while (nread == -1 && errno == EINTR);
+
+        if (nread <= 0) {
+            close(in->fd);
+            in->fd = -1;
+            in->fill = eoffill;
+            in->runflags &= ~run_interactive;
+            if (nread == -1)
+                fail("$&parse", "%s: %s", in->name == None ? "es" : in->name, esstrerror(errno));
+            return EOF;
+        }
+
+        if (in->runflags & run_interactive) {
+            history(hist, &ev, H_SAVE, histfile);
+        }
+
+        in->buf = in->bufbegin;
+        in->bufend = &in->buf[nread];
+        return *in->buf++;
+        */
     }
 
+    /* fdcleanup -- cleanup after running from a file descriptor */
     fn fdcleanup() {
+        /*
+        unregisterfd(&in->fd);
+        if (in->fd != -1)
+            close(in->fd);
+        efree(in->bufbegin);
+        */
     }
 }
 
@@ -243,58 +303,7 @@ static char *esgetenv(const char *name) {
 	}
 }
 
-/* fdfill -- fill input buffer by reading from a file descriptor */
 static int fdfill(Input *in) {
-	int nread;
-	static const char *lastinbuf = None;
-	Boolean dolog;
-	HistEvent ev;
-	int editing;
-	memzero(&ev, sizeof(HistEvent));
-	assert(in->buf == in->bufend);
-	assert(in->fd >= 0);
-
-	el_get(el, EL_EDITMODE, &editing);
-	if (in->runflags & run_interactive && in->fd == 0 && editing) {
-		const char *rlinebuf = callreadline(prompt, &nread);
-		dolog = FALSE;
-		if (rlinebuf == None)
-			nread = 0;
-		else {
-			if (in->buflen < nread) {
-				while (in->buflen < nread)
-					in->buflen *= 2;
-				efree(in->bufbegin);
-				in->bufbegin = erealloc(in->bufbegin, in->buflen);
-			}
-			memcpy(in->bufbegin, rlinebuf, nread - 1);
-			in->bufbegin[nread - 1] = '\n';
-			history(hist, &ev, prompt == prompt2 ? H_ADD : H_ENTER, rlinebuf);
-			lastinbuf = rlinebuf;
-		}
-	} else
-	do {
-		nread = eread(in->fd, (char *) in->bufbegin, in->buflen);
-		SIGCHK();
-	} while (nread == -1 && errno == EINTR);
-
-	if (nread <= 0) {
-		close(in->fd);
-		in->fd = -1;
-		in->fill = eoffill;
-		in->runflags &= ~run_interactive;
-		if (nread == -1)
-			fail("$&parse", "%s: %s", in->name == None ? "es" : in->name, esstrerror(errno));
-		return EOF;
-	}
-
-	if (in->runflags & run_interactive) {
-		history(hist, &ev, H_SAVE, histfile);
-	}
-
-	in->buf = in->bufbegin;
-	in->bufend = &in->buf[nread];
-	return *in->buf++;
 }
 
 
@@ -396,22 +405,7 @@ pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::Lis
         }
     }
 }
-/*
 
-
-/*
- * pushing new input sources
- */
-
-/* fdcleanup -- cleanup after running from a file descriptor */
-static void fdcleanup(Input *in) {
-	unregisterfd(&in->fd);
-	if (in->fd != -1)
-		close(in->fd);
-	efree(in->bufbegin);
-}
-
-*/
 /* runfd -- run commands from a file descriptor */
 pub fn runfd(fd: i32, name: Option<String>, runflags: &mut es::Flags) -> Box<list::List> {
     let inp = Input {
