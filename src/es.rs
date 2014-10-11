@@ -51,3 +51,8 @@ pub enum Tree {
     Redir(Box<Tree>, Box<Tree>),
     Pipe(Box<Tree>, Box<Tree>)
 }
+
+pub struct Es {
+    flags: Flags
+    //vars: Dict
+}

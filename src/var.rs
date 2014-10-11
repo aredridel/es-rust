@@ -11,9 +11,14 @@ struct Push {
 	next: Option<Box<Push>>,
     name: String,
     defn: Option<Box<list::List>>,
-    flags: es::Flags //,
+    flags: Flags //,
     //nameroot: Root,
     //defnroot: Root
+}
+
+pub struct Flags {
+    pub hasbinding: bool,
+    pub isinternal: bool
 }
 
 /*
@@ -229,22 +234,12 @@ extern void vardef(char *name, Binding *binding, List *defn) {
 
 pub fn varpush(name: String, defn: Box<list::List>) -> Push {
     return Push {
-        name: "".to_string(),
+        name: name.to_string(),
         next: None,
         defn: None,
-        flags: es::Flags {
-            run_interactive: true,
-            cmd_stdin: false,
-            cmd: Some("".to_string()),
-            eval_exitonfalse: false,
-            eval_inchild: false,
-            run_noexec: false,
-            run_echoinput: false,
-            run_printcmds: false,
-            loginshell: false,
-            protected: false,
-            keepclosed: false,
-            allowquit: false
+        flags: Flags {
+            hasbinding: false,
+            isinternal: false
         }
     };
 }
