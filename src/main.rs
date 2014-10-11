@@ -79,21 +79,6 @@ static void runesrc(void) {
 
 /* main -- initialize, parse command arguments, and start running */
 fn main() {
-    let mut runflags = es::Flags {
-        run_interactive: true,
-        cmd_stdin: false,
-        cmd: Some("".to_string()),
-        eval_exitonfalse: false,
-        eval_inchild: false,
-        run_noexec: false,
-        run_echoinput: false,
-        run_printcmds: false,
-        loginshell: false,
-        protected: false,
-        keepclosed: false,
-        allowquit: false
-    };
-
     let t = os::args();
     let args = match t.as_slice() {
         [] => vec!("es".to_string()),
@@ -104,10 +89,6 @@ fn main() {
 	initgc();
 	initconv();
     */
-
-	if args[0].as_slice() == "-" {
-		runflags.loginshell = true;
-    }
 
     let opts = [
         optopt("c", "command", "execute argument", "command"),
@@ -128,12 +109,12 @@ fn main() {
         Err(f) => { fail!(f.to_string()) }
     };
 
-    let mut runflags = es::Flags {
+    let runflags = es::Flags {
         cmd_stdin: realopts.opt_present("s"), // Stop processing, this is broken
         cmd: realopts.opt_str("c"),
         eval_inchild: false,
         eval_exitonfalse: realopts.opt_present("e"),
-        run_interactive: realopts.opt_present("i"),
+        run_interactive: realopts.opt_present("i") || (realopts.opt_str("c").is_none() && (realopts.free.len() == 0 || realopts.opt_present("s")) && unsafe { libc::isatty(0) != 0 }),
         run_noexec: realopts.opt_present("n"),
         run_echoinput: realopts.opt_present("v"),
         run_printcmds: realopts.opt_present("x"),
@@ -161,10 +142,6 @@ fn main() {
 		checkfd(1i32, libc::O_CREAT as u16);
 		checkfd(2i32, libc::O_CREAT as u16);
 	}
-
-	if runflags.cmd.is_none() && (realopts.free.len() == 0 || runflags.cmd_stdin) && !runflags.run_interactive && unsafe { libc::isatty(0) != 0 } {
-		runflags.run_interactive = true;
-    }
 
 	let result = {
 		//roothandler = &_localhandler;	/* unhygeinic */
@@ -199,7 +176,7 @@ fn main() {
 			}
 			var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
 			var::vardef("0".to_string(), None, list::mklist(term::Term { str: file.clone() }, None));
-			os::set_exit_status( status::exitstatus(input::runfd(fd, Some(file.clone()), &mut runflags)));
+			os::set_exit_status( status::exitstatus(input::runfd(fd, Some(file.clone()), &runflags)));
             return;
 		}
 	
@@ -211,7 +188,7 @@ fn main() {
                 input::runstring(cmd, None, runflags)
             }
             None => {
-                input::runfd(0, Some("stdin".to_string()), &mut runflags)
+                input::runfd(0, Some("stdin".to_string()), &runflags)
             }
         })
     };

@@ -349,7 +349,7 @@ extern void resetparser(void) {
 
 */
 /* runinput -- run from an input source */
-pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::List> {
+pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
 
     let dispatcher = [
 		"fn-%eval-noprint",
@@ -358,8 +358,8 @@ pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::Lis
 		"fn-%noeval-print",
     ];
 
-	runflags.eval_inchild = true;
 	inp.runflags = runflags.clone();
+	inp.runflags.eval_inchild = true;
 	//inp.prev = Some(input);
 
     match {
@@ -409,7 +409,7 @@ pub fn runinput (mut inp: Box<Input>, runflags: &mut es::Flags) -> Box<list::Lis
 }
 
 /* runfd -- run commands from a file descriptor */
-pub fn runfd(fd: i32, name: Option<String>, runflags: &mut es::Flags) -> Box<list::List> {
+pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<list::List> {
     let inp = Input {
         prev: None,
         /*
