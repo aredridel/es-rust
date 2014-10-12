@@ -363,11 +363,12 @@ pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
 	//inp.prev = Some(input);
 
     match {
-		let mut dispatch = var::varlookup(dispatcher[if runflags.run_printcmds { 1 } else { 0 } + if runflags.run_noexec { 2 } else { 0 }].to_string(), &None);
+        let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } + if runflags.run_noexec { 2 } else { 0 }];
+		let mut dispatch = var::varlookup(dispatchfn.to_string(), &None);
 
         match *dispatch {
             list::Nil => {
-                fail!("no dispatch found")
+                fail!("no dispatch found in '{}'", dispatchfn)
             },
             list::Cons(ref term, ref next) => { }
         }
