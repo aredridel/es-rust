@@ -21,6 +21,13 @@ pub struct Flags {
     pub isinternal: bool
 }
 
+pub struct Var {
+    defn: list::List,
+    flags: Flags
+}
+
+pub struct Dict (TreeMap<String, Var>);
+
 /*
 
 #include "es.h"
@@ -393,18 +400,14 @@ extern void hidevariables(void) {
 */
 
 pub struct Vars {
-	env: Box<Vec<int>>
+	env: TreeMap<String, String>,
+    noexport: TreeSet<String>
 }
 
 impl Vars {
-	/* initvars -- initialize the variable machinery */
-	pub fn initvars(&self) {
-		let vars:TreeMap<String, String> = TreeMap::new();
-		let noexport:TreeSet<String> = TreeSet::new();
-	}
-
+	/* initialize the variable machinery */
 	pub fn new() -> Vars {
-		return Vars { env: box vec![] }
+		return Vars { env: TreeMap::new(), noexport: TreeSet::new() };
 	}
 }
 

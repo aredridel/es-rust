@@ -149,7 +149,6 @@ fn main() {
 		prim::initprims();
 
 		let vars = var::Vars::new();
-		vars.initvars();
         /*
 	
 		dump::runinitial();
