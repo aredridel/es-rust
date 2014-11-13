@@ -2,7 +2,6 @@
 
 use list;
 use term;
-use std::i32::parse_bytes;
 
 /*
 static const Term
