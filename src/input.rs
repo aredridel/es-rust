@@ -368,7 +368,7 @@ pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
 
         match *dispatch {
             list::Nil => {
-                fail!("no dispatch found in '{}'", dispatchfn)
+                panic!("no dispatch found in '{}'", dispatchfn)
             },
             list::Cons(ref term, ref next) => { }
         }
@@ -399,7 +399,7 @@ pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
         Err(e) => {
             //input.cleanup();
             // input = input.prev;
-            fail!(e);
+            panic!(e);
         }
         Ok(res) => {
             // input = inp.prev;

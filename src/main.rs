@@ -106,7 +106,7 @@ fn main() {
 
     let realopts = match getopts(args.tail(), opts) {
         Ok(m) => { m }
-        Err(f) => { fail!(f.to_string()) }
+        Err(f) => { panic!(f.to_string()) }
     };
 
     let runflags = es::Flags {
@@ -125,7 +125,7 @@ fn main() {
     };
 
     if runflags.cmd_stdin && !runflags.cmd.is_none() {
-		fail!("es: -s and -c are incompatible\n");
+		panic!("es: -s and -c are incompatible\n");
 	}
 
     fn b0rk(message: String) {

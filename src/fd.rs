@@ -8,7 +8,7 @@ pub fn mvfd(old: i32, new: i32) {
         unsafe {
             let fd = libc::dup2(old, new);
             if fd == -1i32 {
-                fail!("es:mvfd dup2: {}", libc::strerror(os::errno() as i32));
+                panic!("es:mvfd dup2: {}", libc::strerror(os::errno() as i32));
             }
             assert!(fd == new);
             libc::close(old);
