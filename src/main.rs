@@ -83,11 +83,11 @@ static void runesrc(void) {
 
 /* main -- initialize, parse command arguments, and start running */
 fn main() {
-    let t = os::args();
-    let args = match t.as_slice() {
+    let t = std::env::args();
+    let args = /*match t.as_slice() {
         [] => vec!("es".to_string()),
         _ => t
-    };
+    };*/ vec!("es".to_string());
 
     /*
 	initgc();
@@ -184,7 +184,7 @@ fn main() {
 		}
 	
 		var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::os::args()[0].to_string() }, None));
+		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::env::args()[0].to_string() }, None));
 
 		status::exitstatus(match runflags.cmd.clone() {
             Some(cmd) => {
