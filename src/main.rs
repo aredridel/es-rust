@@ -5,6 +5,10 @@ extern crate libc;
 use getopts::{optopt,optflag,getopts,usage};
 use std::os;
 use std::io;
+use std::ffi::{CString};
+extern crate errno;
+use errno::{errno};
+use libc::{c_int};
 mod es;
 mod list;
 mod binding;
@@ -22,8 +26,8 @@ fn checkfd(fd: i32, r: u16) {
         let new = libc::dup(fd);
         if new != -1 {
             libc::close(new);
-        } else if os::errno() == libc::EBADF as uint {
-            let null = "/dev/null".with_c_str(|path| libc::open(path, 0, r));
+        } else if errno() as c_int == libc::EBADF {
+            let null = libc::open(CString::from_slice("/dev/null".as_bytes()).as_ptr(), 0, r);
             if null != -1i32 {
                 fd::mvfd(new, fd);
             }
@@ -169,7 +173,7 @@ fn main() {
             let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY as u16) }) };
 			if fd == -1 {
                 let mut stderr = io::stderr();
-				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(os::errno() as i32 )});
+				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(errno() as i32 )});
                 os::set_exit_status(1);
 				return;
 			}

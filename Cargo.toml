@@ -3,3 +3,7 @@
 name = "es"
 version = "0.0.0"
 authors = ["Aria Stewart <aredridel@nbtsc.org>"]
+
+[dependencies]
+errno = "0.1.5"
+libc = "0.2.4"

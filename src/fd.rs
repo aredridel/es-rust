@@ -1,5 +1,7 @@
 /* fd.rs -- file descriptor manipulations ($Revision: 1.2 $) */
 extern crate libc;
+extern crate errno;
+use errno::errno;
 use std::os;
 
 /* mvfd -- duplicate a fd and close the old */
@@ -8,7 +10,7 @@ pub fn mvfd(old: i32, new: i32) {
         unsafe {
             let fd = libc::dup2(old, new);
             if fd == -1i32 {
-                panic!("es:mvfd dup2: {}", libc::strerror(os::errno() as i32));
+                panic!("es:mvfd dup2: {}", errno());
             }
             assert!(fd == new);
             libc::close(old);
