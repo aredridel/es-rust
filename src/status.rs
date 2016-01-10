@@ -37,7 +37,7 @@ extern Boolean istrue(List *status) {
 */
 
 /* exitstatus -- turn a status list into an exit(2) value */
-pub fn exitstatus(status: Box<list::List>) -> int {
+pub fn exitstatus(status: Box<list::List>) -> i32 {
     return 0;
     /*
     return match status {
@@ -85,7 +85,7 @@ extern char *mkstatus(int status) {
 }
 
 /* printstatus -- print the status if we should */
-extern void printstatus(int pid, int status) {
+extern void printstatus(i32 pid, i32 status) {
 	if (tcgetpgrp(shell_tty) != shell_pgid) {
 		return;
 	}

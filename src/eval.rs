@@ -378,7 +378,7 @@ extern List *pathsearch(Term *term) {
 */
 
 /* eval -- evaluate a list, producing a list */
-pub fn eval(list0: &::list::List, binding0: Option<::binding::Binding>, flags: int) -> ::list::List {
+pub fn eval(list0: &::list::List, binding0: Option<::binding::Binding>, flags: i32) -> ::list::List {
 /*
 	Closure *volatile cp;
 	List *fn;
@@ -486,12 +486,12 @@ done:
 	RefEnd2(funcname, binding);
 	RefReturn(list);
     */
-    return ::list::Nil;
+    return ::list::List::Nil;
 }
 
 /* eval1 -- evaluate a term, producing a list */
-pub fn eval1(term: ::term::Term, flags: int) -> ::list::List {
-	return eval(&::list::Cons(term, box ::list::Nil), None, flags);
+pub fn eval1(term: ::term::Term, flags: i32) -> ::list::List {
+	return eval(&::list::List::Cons(term, Box::new(::list::List::Nil)), None, flags);
 }
 /*
 extern List *eval1(Term *term, int flags) {

@@ -8,7 +8,7 @@ use term;
 use list;
 use std::c_str;
 
-static BUFSIZE: int = 1024i;
+static BUFSIZE: i32 = 1024;
 
 pub struct Input {
 	pub prev: Option<Box<Input>>,
@@ -22,7 +22,7 @@ pub struct Input {
     unget: [int, ..2],
     ungot: int,
     */
-    pub lineno: int,
+    pub lineno: i32,
     pub fd: i32,
     pub runflags: es::Flags
 }
@@ -124,11 +124,11 @@ impl Input {
         }
     }
 
-    fn fill (&self) -> int {
+    fn fill (&self) -> i32 {
         0
     }
 
-    fn rfill (&self) -> int {
+    fn rfill (&self) -> i32 {
         0
     }
 
@@ -198,8 +198,8 @@ extern void sethistory(char *file) {
  */
 
 /* ungetfill -- input->fill routine for ungotten characters */
-static int ungetfill(Input *in) {
-	int c;
+static i32 ungetfill(Input *in) {
+	i32 c;
 	assert(in->ungot > 0);
 	c = in->unget[--in->ungot];
 	if (in->ungot == 0) {
@@ -214,7 +214,7 @@ static int ungetfill(Input *in) {
 }
 
 /* unget -- push back one character */
-extern void unget(Input *in, int c) {
+extern void unget(Input *in, i32 c) {
 	if (in->ungot > 0) {
 		assert(in->ungot < MAXUNGET);
 		in->unget[in->ungot++] = c;
@@ -239,19 +239,19 @@ extern void unget(Input *in, int c) {
  */
 
 /* get -- get a character, filter out nulls */
-static int get(Input *in) {
+static i32 get(Input *in) {
 }
 
 /* getverbose -- get a character, print it to standard error */
 
 /* eoffill -- report eof when called to fill input buffer */
-static int eoffill(Input *in) {
+static i32 eoffill(Input *in) {
 	assert(in->fd == -1);
 	return EOF;
 }
 
 /* callreadline -- readline wrapper */
-static const char *callreadline(char *prompt, int *n) {
+static const char *callreadline(char *prompt, i32 *n) {
 	const char *r;
 	if (resetterminal) {
 		resetterminal = FALSE;
@@ -305,7 +305,7 @@ static char *esgetenv(const char *name) {
 	}
 }
 
-static int fdfill(Input *in) {
+static i32 fdfill(Input *in) {
 }
 
 
@@ -315,7 +315,7 @@ static int fdfill(Input *in) {
 
 /* parse -- call yyparse(), but disable garbage collection and catch errors */
 extern Tree *parse(char *pr1, char *pr2) {
-	int result;
+	i32 result;
 	assert(error == None);
 
 	inityy();
