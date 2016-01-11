@@ -1,6 +1,6 @@
 /* prim.c -- primitives and primitive dispatching ($Revision: 1.1.1.1 $) */
 
-use std::collections::{BTreeMap,BTreeSet};
+use std::collections::BTreeMap;
 
 /*
 static Dict *prims;

@@ -1,7 +1,6 @@
 /* input.rs -- read input from files or strings ($Revision: 1.2 $) */
 
 extern crate libc;
-use main;
 use es;
 use var;
 use term;
