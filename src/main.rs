@@ -5,7 +5,8 @@ extern crate libc;
 use getopts::Options;
 use std::os;
 use std::io;
-use std::ffi::{CString};
+use std::io::Write;
+use std::ffi::{CString,CStr};
 extern crate errno;
 use errno::{errno};
 use libc::{c_int};
@@ -26,11 +27,11 @@ fn checkfd(fd: i32, r: u16) {
         let new = libc::dup(fd);
         if new != -1 {
             libc::close(new);
-        } else if errno() as c_int == libc::EBADF {
-            let null = libc::open(CString::from_slice("/dev/null".as_bytes()).as_ptr(), 0, r);
-            if null != -1i32 {
-                fd::mvfd(new, fd);
-            }
+        } else if errno() == errno::Errno(libc::EBADF) {
+	    let null = libc::open(CString::new("/dev/null").unwrap().into_raw(), 0, r as c_int);
+	    if null != -1i32 {
+		fd::mvfd(new, fd);
+	    }
         }
     }
 }
@@ -132,7 +133,7 @@ fn main() {
         let mut stderr = io::stderr();
 
         writeln!(stderr, "{}", message);
-        std::os::set_exit_status(1);
+	std::process::exit(1);
     }
 
     b0rk(opts.usage("es [options] [file [args...]]"));
@@ -166,16 +167,16 @@ fn main() {
 	
 		if runflags.cmd.is_none() && !runflags.cmd_stdin && realopts.free.len() > 0 {
             let ref file = realopts.free[0];
-            let fd = unsafe { file.as_slice().with_c_str({|f| libc::open(f, 0, libc::O_RDONLY as u16) }) };
+            let fd = unsafe { libc::open(CString::new(file.to_string().into_bytes()).unwrap().into_raw(), 0, libc::O_RDONLY) };
 			if fd == -1 {
-                let mut stderr = io::stderr();
-				writeln!(stderr, "{}: {}\n", file, unsafe { libc::strerror(errno() as i32 )});
-                os::set_exit_status(1);
+				let mut stderr = io::stderr();
+				writeln!(stderr, "{}: {}\n", file, errno());
+				std::process::exit(1);
 				return;
 			}
 			var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
 			var::vardef("0".to_string(), None, list::mklist(term::Term { str: file.clone() }, None));
-			os::set_exit_status( status::exitstatus(input::runfd(fd, Some(file.clone()), &runflags)));
+			std::process::exit( status::exitstatus(input::runfd(fd, Some(file.clone()), &runflags)));
             return;
 		}
 	
@@ -204,8 +205,8 @@ fn main() {
 			eprint("uncaught exception: %L\n", e, " ");
             */
 
-        os::set_exit_status(result);
+	std::process::exit(result);
     } else {
-        os::set_exit_status(result);
+	std::process::exit(result);
     }
 }
