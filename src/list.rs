@@ -18,10 +18,10 @@ DefineTag(List, static);
 */
 
 pub fn mklist(term: term::Term, next: Option<List>) -> Box<List> {
-    return box Cons(term, match next {
-        None => { box Nil }
-        Some(fol) => { box fol }
-    });
+    return Box::new(List::Cons(term, match next {
+        None => { Box::new(List::Nil) }
+        Some(fol) => { Box::new(fol) }
+    }));
 }
 /*
 extern List *mklist(Term *term, List *next) {
@@ -104,7 +104,7 @@ extern int length(List *list) {
 */
 /* listify -- turn an argc/argv vector into a list */
 pub fn listify(argv: Vec<String>) -> Box<List> {
-    box Nil
+    Box::new(List::Nil)
 }
 /*
 extern List *listify(int argc, char **argv) {

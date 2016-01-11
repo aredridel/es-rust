@@ -2,15 +2,15 @@
 
 
 use es;
-use list;
+use list::List;
 use term;
 use binding;
-use std::collections::{TreeMap,TreeSet};
+use std::collections::{BTreeMap,BTreeSet};
 
-struct Push {
+pub struct Push {
 	next: Option<Box<Push>>,
     name: String,
-    defn: Option<Box<list::List>>,
+    defn: Option<Box<List>>,
     flags: Flags //,
     //nameroot: Root,
     //defnroot: Root
@@ -22,11 +22,11 @@ pub struct Flags {
 }
 
 pub struct Var {
-    defn: list::List,
+    defn: List,
     flags: Flags
 }
 
-pub struct Dict (TreeMap<String, Var>);
+pub struct Dict (BTreeMap<String, Var>);
 
 /*
 
@@ -145,8 +145,8 @@ extern void setnoexport(List *list) {
 */
 
 /* varlookup -- lookup a variable in the current context */
-pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<list::List> {
-    box list::Nil
+pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<List> {
+    Box::new(List::Nil)
 }
 
 /*
@@ -204,7 +204,7 @@ static List *callsettor(char *name, List *defn) {
 
 */
 
-pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<list::List>) {
+pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<List>) {
 }
 /*
 extern void vardef(char *name, Binding *binding, List *defn) {
@@ -239,7 +239,7 @@ extern void vardef(char *name, Binding *binding, List *defn) {
 }
 */
 
-pub fn varpush(name: String, defn: Box<list::List>) -> Push {
+pub fn varpush(name: String, defn: Box<List>) -> Push {
     return Push {
         name: name.to_string(),
         next: None,
@@ -400,14 +400,14 @@ extern void hidevariables(void) {
 */
 
 pub struct Vars {
-	env: TreeMap<String, String>,
-    noexport: TreeSet<String>
+	env: BTreeMap<String, String>,
+    noexport: BTreeSet<String>
 }
 
 impl Vars {
 	/* initialize the variable machinery */
 	pub fn new() -> Vars {
-		return Vars { env: TreeMap::new(), noexport: TreeSet::new() };
+		return Vars { env: BTreeMap::new(), noexport: BTreeSet::new() };
 	}
 }
 

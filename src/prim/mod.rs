@@ -1,6 +1,6 @@
 /* prim.c -- primitives and primitive dispatching ($Revision: 1.1.1.1 $) */
 
-use std::collections::{TreeMap,TreeSet};
+use std::collections::{BTreeMap,BTreeSet};
 
 /*
 static Dict *prims;
@@ -29,7 +29,7 @@ PRIM(primitives) {
 mod ctl;
 
 pub fn initprims() {
-    let mut prims:TreeMap<String, |&::list::List| -> ::list::List> = TreeMap::new();
+    let mut prims:BTreeMap<String, fn(&::list::List) -> ::list::List> = BTreeMap::new();
 	ctl::initprims_controlflow(&mut prims);
 /*
 	prims = initprims_io(prims);

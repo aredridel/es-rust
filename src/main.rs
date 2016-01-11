@@ -181,7 +181,7 @@ fn main() {
 		}
 	
 		var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::env::args()[0].to_string() }, None));
+		var::vardef("0".to_string(), None, list::mklist(term::Term { str: std::env::args().nth(0).unwrap() }, None));
 
 		status::exitstatus(match runflags.cmd.clone() {
             Some(cmd) => {

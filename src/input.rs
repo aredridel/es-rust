@@ -5,8 +5,7 @@ use main;
 use es;
 use var;
 use term;
-use list;
-use std::c_str;
+use list::{List,mklist};
 
 static BUFSIZE: i32 = 1024;
 
@@ -349,7 +348,7 @@ extern void resetparser(void) {
 
 */
 /* runinput -- run from an input source */
-pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
+pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<List> {
 
     let dispatcher = [
 		"fn-%eval-noprint",
@@ -367,26 +366,26 @@ pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
 		let mut dispatch = var::varlookup(dispatchfn.to_string(), &None);
 
         match *dispatch {
-            list::Nil => {
+            List::Nil => {
                 panic!("no dispatch found in '{}'", dispatchfn)
             },
-            list::Cons(ref term, ref next) => { }
+            List::Cons(ref term, ref next) => { }
         }
 
 		if runflags.eval_exitonfalse {
-			dispatch = list::mklist(term::Term { str: "%exit-on-false".to_string() }, Some(*dispatch));
+			dispatch = mklist(term::Term { str: "%exit-on-false".to_string() }, Some(*dispatch));
         }
 		let push = var::varpush("fn-%dispatch".to_string(), dispatch);
 	
 		let repl = var::varlookup( if runflags.run_interactive { "fn-%interactive-loop" } else { "fn-%batch-loop" }.to_string(), &None);
 		let result = match *repl {
-            list::Nil => {
+            List::Nil => {
                 Err("")
                 //prim("batchloop", None, None, runflags)
             },
-            list::Cons(ref term, ref next) => {
+            List::Cons(ref term, ref next) => {
                 Err("")
-                //Ok(list::Nil) as Result<list::List, String>
+                //Ok(List::Nil) as Result<List, String>
                 //eval(repl, None, runflags)
             }
         };
@@ -404,13 +403,13 @@ pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<list::List> {
         Ok(res) => {
             // input = inp.prev;
             inp.cleanup();
-            return box res;
+            return Box::new(res);
         }
     }
 }
 
 /* runfd -- run commands from a file descriptor */
-pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<list::List> {
+pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List> {
     let inp = Input {
         prev: None,
         /*
@@ -448,7 +447,7 @@ pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<list::L
 	//in.bufbegin = in.buf = ealloc(in.buflen);
 
 	//RefAdd(inp.name);
-	let result = runinput(box inp, runflags);
+	let result = runinput(Box::new(inp), runflags);
 	//RefRemove(inp.name);
 
 	return result;
@@ -461,15 +460,15 @@ static void stringcleanup(Input *in) {
 }
 
 /* stringfill -- placeholder than turns into EOF right away */
-static int stringfill(Input *in) {
+static i32 stringfill(Input *in) {
 	in->fill = eoffill;
 	return EOF;
 }
 
 /* runstring -- run commands from a string */
 */
-pub fn runstring (s: String, name: Option<String>, flags: es::Flags) -> Box<list::List> {
-    box list::Nil
+pub fn runstring (s: String, name: Option<String>, flags: es::Flags) -> Box<List> {
+    Box::new(List::Nil)
 }
 /*
 extern List *runstring(const char *str, const char *name, int flags) {

@@ -1,14 +1,14 @@
 /* prim-ctl.rs -- control flow primitives */
-use std::collections::{TreeMap};
+use std::collections::{BTreeMap};
 
 fn seq(lp: &::list::List/*, binding: &Binding, evalflags: int*/) -> ::list::List {
     match *lp {
-        ::list::Cons(ref l, box ref next) => {
+        ::list::List::Cons(ref l, ref next) => {
             /* result = eval1(lp->term, evalflags &~ (lp->next == NULL ? 0 : eval_inchild)); */
             return seq(next);
         },
-        ::list::Nil => {
-            return ::list::Nil;
+        ::list::List::Nil => {
+            return ::list::List::Nil;
         }
     }
 
@@ -33,7 +33,7 @@ fn _if(lp: &::list::List) -> ::list::List {
 	RefEnd(lp);
 	return true;
     */
-    return ::list::Nil;
+    return ::list::List::Nil;
 }
 
 fn forever(lp: &::list::List) -> ::list::List {
@@ -44,7 +44,7 @@ fn forever(lp: &::list::List) -> ::list::List {
 	RefEnd(body);
 	return ::list;
     */
-    return ::list::Nil;
+    return ::list::List::Nil;
 }
 
 fn throw(lp: &::list::List) -> ::list::List {
@@ -54,7 +54,7 @@ fn throw(lp: &::list::List) -> ::list::List {
 	throw(list);
 	NOTREACHED;
     */
-    return ::list::Nil;
+    return ::list::List::Nil;
 }
 
 fn catch(lp: &::list::List) -> ::list::List {
@@ -102,10 +102,10 @@ fn catch(lp: &::list::List) -> ::list::List {
 	RefEnd(lp);
 	RefReturn(result);
     */
-    return ::list::Nil;
+    return ::list::List::Nil;
 }
 
-pub fn initprims_controlflow(prims: &mut TreeMap<String, |&::list::List| -> ::list::List>) {
+pub fn initprims_controlflow(prims: &mut BTreeMap<String, fn(&::list::List) -> ::list::List>) {
     prims.insert("seq".to_string(), seq);
     prims.insert("if".to_string(), _if);
     prims.insert("throw".to_string(), throw);
