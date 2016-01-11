@@ -378,6 +378,7 @@ extern List *pathsearch(Term *term) {
 */
 
 /* eval -- evaluate a list, producing a list */
+#[allow(unused_variables)]
 pub fn eval(list0: &::list::List, binding0: Option<::binding::Binding>, flags: i32) -> ::list::List {
 /*
 	Closure *volatile cp;
@@ -490,6 +491,7 @@ done:
 }
 
 /* eval1 -- evaluate a term, producing a list */
+#[allow(dead_code)]
 pub fn eval1(term: ::term::Term, flags: i32) -> ::list::List {
 	return eval(&::list::List::Cons(term, Box::new(::list::List::Nil)), None, flags);
 }

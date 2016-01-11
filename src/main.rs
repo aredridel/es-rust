@@ -82,6 +82,7 @@ static void runesrc(void) {
 */
 
 /* main -- initialize, parse command arguments, and start running */
+#[allow(unused_variables)]
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 

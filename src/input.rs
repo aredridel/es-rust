@@ -28,6 +28,7 @@ pub struct Input {
 
 impl Input {
     /* fdfill -- fill input buffer by reading from a file descriptor */
+#[allow(dead_code)]
     fn fdfill() {
         unimplemented!();
         /*
@@ -85,6 +86,7 @@ impl Input {
     }
 
     /* fdcleanup -- cleanup after running from a file descriptor */
+#[allow(dead_code)]
     fn fdcleanup() {
         unimplemented!();
         /*
@@ -97,6 +99,7 @@ impl Input {
 }
 
 impl Input {
+#[allow(dead_code)]
     fn get (&self) -> i8 {
         if self.runflags.run_echoinput {
             unimplemented!();
@@ -123,14 +126,17 @@ impl Input {
         }
     }
 
+#[allow(dead_code)]
     fn fill (&self) -> i32 {
         0
     }
 
+#[allow(dead_code)]
     fn rfill (&self) -> i32 {
         0
     }
 
+#[allow(dead_code)]
     fn cleanup (&self) {
     }
 }

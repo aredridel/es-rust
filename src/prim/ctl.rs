@@ -1,6 +1,7 @@
 /* prim-ctl.rs -- control flow primitives */
 use std::collections::{BTreeMap};
 
+#[allow(unused_variables)]
 fn seq(lp: &::list::List/*, binding: &Binding, evalflags: int*/) -> ::list::List {
     match *lp {
         ::list::List::Cons(ref l, ref next) => {
@@ -14,6 +15,7 @@ fn seq(lp: &::list::List/*, binding: &Binding, evalflags: int*/) -> ::list::List
 
 }
 
+#[allow(unused_variables)]
 fn _if(lp: &::list::List) -> ::list::List {
     /*
 	Ref(List *, lp, ::list);
@@ -36,6 +38,7 @@ fn _if(lp: &::list::List) -> ::list::List {
     return ::list::List::Nil;
 }
 
+#[allow(unused_variables)]
 fn forever(lp: &::list::List) -> ::list::List {
     /*
 	Ref(List *, body, ::list);
@@ -47,6 +50,7 @@ fn forever(lp: &::list::List) -> ::list::List {
     return ::list::List::Nil;
 }
 
+#[allow(unused_variables)]
 fn throw(lp: &::list::List) -> ::list::List {
     /*
 	if (list == NULL)
@@ -57,6 +61,7 @@ fn throw(lp: &::list::List) -> ::list::List {
     return ::list::List::Nil;
 }
 
+#[allow(unused_variables)]
 fn catch(lp: &::list::List) -> ::list::List {
     /*
 	Atomic retry;
