@@ -98,7 +98,7 @@ impl Input {
 
 impl Input {
     fn get (&self) -> i8 {
-        if (self.runflags.run_echoinput) {
+        if self.runflags.run_echoinput {
             unimplemented!();
             /*
             if (in->fill == ungetfill)
