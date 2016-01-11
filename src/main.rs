@@ -3,13 +3,12 @@
 extern crate getopts;
 extern crate libc;
 use getopts::Options;
-use std::os;
 use std::io;
 use std::io::Write;
-use std::ffi::{CString,CStr};
+use std::ffi::CString;
 extern crate errno;
-use errno::{errno};
-use libc::{c_int};
+use errno::errno;
+use libc::c_int;
 mod es;
 mod list;
 mod binding;
