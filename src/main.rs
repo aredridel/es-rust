@@ -2,7 +2,7 @@
 
 extern crate getopts;
 extern crate libc;
-use getopts::{optopt,optflag,getopts,usage};
+use getopts::Options;
 use std::os;
 use std::io;
 use std::ffi::{CString};
@@ -83,32 +83,28 @@ static void runesrc(void) {
 
 /* main -- initialize, parse command arguments, and start running */
 fn main() {
-    let t = std::env::args();
-    let args = /*match t.as_slice() {
-        [] => vec!("es".to_string()),
-        _ => t
-    };*/ vec!("es".to_string());
+    let args: Vec<String> = std::env::args().collect();
 
     /*
 	initgc();
 	initconv();
     */
 
-    let opts = [
-        optopt("c", "command", "execute argument", "command"),
-        optflag("e", "errexit", "exit if any command exits with false status"),
-        optflag("i", "interactive", "interactive shell"),
-        optflag("n", "", "just parse; don't execute"),
-        optflag("v", "verbose", "print input to standard error"),
-        optflag("x", "printcmds", "print commands to standard error before executing"),
-        optflag("l", "login", "login shell"),
-        optflag("p", "", "don't load functions from the environment"),
-        optflag("o", "noopen", "don't open stdin, stdout and stderr if they were closed"),
-        optflag("d", "", "don't ignore SIGQUIT or SIGTERM"),
-        optflag("s", "stdin", "read commands from standard input; stop option parsing")
-    ];
+	let mut opts = Options::new();
 
-    let realopts = match getopts(args.tail(), opts) {
+	opts.optopt("c", "command", "execute argument", "command");
+	opts.optflag("e", "errexit", "exit if any command exits with false status");
+    opts.optflag("i", "interactive", "interactive shell");
+    opts.optflag("n", "", "just parse; don't execute");
+    opts.optflag("v", "verbose", "print input to standard error");
+    opts.optflag("x", "printcmds", "print commands to standard error before executing");
+    opts.optflag("l", "login", "login shell");
+    opts.optflag("p", "", "don't load functions from the environment");
+    opts.optflag("o", "noopen", "don't open stdin, stdout and stderr if they were closed");
+    opts.optflag("d", "", "don't ignore SIGQUIT or SIGTERM");
+    opts.optflag("s", "stdin", "read commands from standard input; stop option parsing");
+
+    let realopts = match opts.parse(&args[1..]) {
         Ok(m) => { m }
         Err(f) => { panic!(f.to_string()) }
     };
@@ -139,7 +135,7 @@ fn main() {
         std::os::set_exit_status(1);
     }
 
-    b0rk(usage("es [options] [file [args...]]", opts));
+    b0rk(opts.usage("es [options] [file [args...]]"));
 
 	if !runflags.keepclosed {
 		checkfd(0i32, 0);
