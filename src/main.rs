@@ -171,12 +171,10 @@ fn main() {
 				let mut stderr = io::stderr();
 				writeln!(stderr, "{}: {}\n", file, errno());
 				std::process::exit(1);
-				return;
 			}
 			var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
 			var::vardef("0".to_string(), None, list::mklist(term::Term { str: file.clone() }, None));
 			std::process::exit( status::exitstatus(input::runfd(fd, Some(file.clone()), &runflags)));
-            return;
 		}
 	
 		var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
