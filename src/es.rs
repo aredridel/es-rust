@@ -10,7 +10,7 @@ pub struct Flags {
     pub loginshell: bool,
     pub protected: bool,
     pub keepclosed: bool,
-    pub allowquit: bool
+    pub allowquit: bool,
 }
 
 
@@ -28,7 +28,7 @@ impl Clone for Flags {
             loginshell: self.loginshell.clone(),
             protected: self.protected.clone(),
             keepclosed: self.keepclosed.clone(),
-            allowquit: self.allowquit.clone()
+            allowquit: self.allowquit.clone(),
         }
     }
 }
@@ -50,12 +50,11 @@ pub enum Tree {
     Match(Box<Tree>, Box<Tree>),
     Extract(Box<Tree>, Box<Tree>),
     Redir(Box<Tree>, Box<Tree>),
-    Pipe(Box<Tree>, Box<Tree>)
+    Pipe(Box<Tree>, Box<Tree>),
 }
 
 #[allow(dead_code)]
 pub struct Es {
-#[allow(dead_code)]
-    flags: Flags
-    //vars: Dict
+    #[allow(dead_code)]
+    flags: Flags, // vars: Dict
 }

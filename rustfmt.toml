@@ -1,0 +1,5 @@
+normalise_comments = false
+take_source_hints = false
+report_todo = "Never"
+single_line_if_else = true
+reorder_imports = true
