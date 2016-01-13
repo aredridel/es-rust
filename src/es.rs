@@ -33,6 +33,7 @@ impl Clone for Flags {
     }
 }
 
+#[allow(dead_code)]
 pub enum Tree {
     Word(u32),
     Qword(u64),
@@ -52,7 +53,9 @@ pub enum Tree {
     Pipe(Box<Tree>, Box<Tree>)
 }
 
+#[allow(dead_code)]
 pub struct Es {
+#[allow(dead_code)]
     flags: Flags
     //vars: Dict
 }
