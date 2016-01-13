@@ -2,7 +2,6 @@
 extern crate libc;
 extern crate errno;
 use errno::errno;
-use std::os;
 
 /* mvfd -- duplicate a fd and close the old */
 pub fn mvfd(old: i32, new: i32) {
