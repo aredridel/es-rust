@@ -8,9 +8,13 @@ use binding;
 use std::collections::{BTreeMap,BTreeSet};
 
 pub struct Push {
+#[allow(dead_code)]
 	next: Option<Box<Push>>,
+#[allow(dead_code)]
     name: String,
+#[allow(dead_code)]
     defn: Option<Box<List>>,
+#[allow(dead_code)]
     flags: Flags //,
     //nameroot: Root,
     //defnroot: Root
@@ -22,10 +26,13 @@ pub struct Flags {
 }
 
 pub struct Var {
+#[allow(dead_code)]
     defn: List,
+#[allow(dead_code)]
     flags: Flags
 }
 
+#[allow(dead_code)]
 pub struct Dict (BTreeMap<String, Var>);
 
 /*
@@ -399,6 +406,7 @@ extern void hidevariables(void) {
 }
 */
 
+#[allow(dead_code)]
 pub struct Vars {
 	env: BTreeMap<String, String>,
     noexport: BTreeSet<String>
