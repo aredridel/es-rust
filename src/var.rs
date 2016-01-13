@@ -1,9 +1,7 @@
 /* var.rs -- es variables */
 
 
-use es;
 use list::List;
-use term;
 use binding;
 use std::collections::{BTreeMap,BTreeSet};
 
