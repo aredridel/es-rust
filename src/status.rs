@@ -16,6 +16,8 @@ List
 */
 
 /* istrue -- is this status list true? */
+#[allow(dead_code)]
+#[allow(unused_variables)]
 pub fn istrue(status: &list::List) -> bool {
     return true;
 }
@@ -37,6 +39,7 @@ extern Boolean istrue(List *status) {
 */
 
 /* exitstatus -- turn a status list into an exit(2) value */
+#[allow(unused_variables)]
 pub fn exitstatus(status: Box<list::List>) -> i32 {
     return 0;
     /*
