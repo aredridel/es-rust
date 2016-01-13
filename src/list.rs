@@ -103,6 +103,7 @@ extern int length(List *list) {
 }
 */
 /* listify -- turn an argc/argv vector into a list */
+#[allow(unused_variables)]
 pub fn listify(argv: Vec<String>) -> Box<List> {
     Box::new(List::Nil)
 }
