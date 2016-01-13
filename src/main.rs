@@ -132,7 +132,7 @@ fn main() {
     fn b0rk(message: String) {
         let mut stderr = io::stderr();
 
-        writeln!(stderr, "{}", message);
+        writeln!(stderr, "{}", message).unwrap();
 	std::process::exit(1);
     }
 
@@ -170,7 +170,7 @@ fn main() {
             let fd = unsafe { libc::open(CString::new(file.to_string().into_bytes()).unwrap().into_raw(), 0, libc::O_RDONLY) };
 			if fd == -1 {
 				let mut stderr = io::stderr();
-				writeln!(stderr, "{}: {}\n", file, errno());
+				writeln!(stderr, "{}: {}\n", file, errno()).unwrap();
 				std::process::exit(1);
 			}
 			var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
