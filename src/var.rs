@@ -150,6 +150,7 @@ extern void setnoexport(List *list) {
 */
 
 /* varlookup -- lookup a variable in the current context */
+#[allow(unused_variables)]
 pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<List> {
     Box::new(List::Nil)
 }
@@ -209,6 +210,7 @@ static List *callsettor(char *name, List *defn) {
 
 */
 
+#[allow(unused_variables)]
 pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<List>) {
 }
 /*
@@ -244,6 +246,7 @@ extern void vardef(char *name, Binding *binding, List *defn) {
 }
 */
 
+#[allow(unused_variables)]
 pub fn varpush(name: String, defn: Box<List>) -> Push {
     return Push {
         name: name.to_string(),
@@ -293,6 +296,7 @@ extern void varpush(Push *push, char *name, List *defn) {
 }
 */
 
+#[allow(unused_variables)]
 pub fn varpop (push: Push) {
 }
 /*
