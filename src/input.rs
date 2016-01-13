@@ -6,6 +6,7 @@ use var;
 use term;
 use list::{List,mklist};
 
+#[allow(dead_code)]
 static BUFSIZE: i32 = 1024;
 
 pub struct Input {
@@ -353,6 +354,7 @@ extern void resetparser(void) {
 
 */
 /* runinput -- run from an input source */
+#[allow(unused_variables)]
 pub fn runinput (mut inp: Box<Input>, runflags: &es::Flags) -> Box<List> {
 
     let dispatcher = [
@@ -472,6 +474,7 @@ static i32 stringfill(Input *in) {
 
 /* runstring -- run commands from a string */
 */
+#[allow(unused_variables)]
 pub fn runstring (s: String, name: Option<String>, flags: es::Flags) -> Box<List> {
     Box::new(List::Nil)
 }
