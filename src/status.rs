@@ -1,7 +1,6 @@
 /* status.rs -- status manipulations ($Revision: 1.1.1.1 $) */
 
 use list;
-use term;
 
 /*
 static const Term
