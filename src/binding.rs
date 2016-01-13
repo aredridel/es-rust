@@ -1,6 +1,5 @@
 extern crate libc;
 use list;
-use term;
 
 pub struct Binding {
 #[allow(dead_code)]
