@@ -1,4 +1,5 @@
-use ::var::Vars;
+use var::Vars;
+use std::result::Result;
 
 pub struct Flags {
     pub cmd_stdin: bool,
@@ -59,16 +60,29 @@ pub enum Tree {
 pub struct Es {
     #[allow(dead_code)]
     pub flags: Flags,
-    vars: Vars
+    vars: Vars,
 }
 
 impl Es {
-    pub fn new(f: Flags, vars: Vars) -> Es {
+    pub fn new(f: Flags, vars: Vars) -> Result<Es, &'static str> {
         let es = Es {
             flags: f,
-            vars: vars
+            vars: vars,
         };
 
-        return es;
+        /* dump::runinitial();
+         *
+         * initpath();
+         * initpid();
+         * signal::initsignals(runflags & run_interactive, allowquit);
+         * var::hidevariables();
+         * var::initenv(environ, protected);
+         * */
+
+        if es.flags.loginshell {
+            // runesrc();
+        }
+
+        return Ok(es);
     }
 }

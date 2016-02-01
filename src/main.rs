@@ -153,52 +153,47 @@ fn main() {
     }
 
     let result = {
-        let es = Es::new(runflags, var::Vars::new());
-        // roothandler = &_localhandler;	/* unhygeinic */
+        match Es::new(runflags, var::Vars::new()) {
+            Ok(es) => {
+                // roothandler = &_localhandler;	/* unhygeinic */
 
-        prim::initprims();
+                prim::initprims();
 
-        /* dump::runinitial();
-         *
-         * initpath();
-         * initpid();
-         * signal::initsignals(runflags & run_interactive, allowquit);
-         * var::hidevariables();
-         * var::initenv(environ, protected);
-         * */
+                if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
+                    let ref file = realopts.free[0];
+                    let fd = unsafe {
+                        libc::open(CString::new(file.to_string().into_bytes()).unwrap().into_raw(),
+                                   0,
+                                   libc::O_RDONLY)
+                    };
+                    if fd == -1 {
+                        let mut stderr = io::stderr();
+                        writeln!(stderr, "{}: {}\n", file, errno()).unwrap();
+                        std::process::exit(1);
+                    }
+                    var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+                    var::vardef("0".to_string(),
+                                None,
+                                list::mklist(term::Term { str: file.clone() }, None));
+                    std::process::exit(status::exitstatus(input::runfd(fd,
+                                                                       Some(file.clone()),
+                                                                       &es.flags)));
+                }
 
-        if es.flags.loginshell {
-            // runesrc();
+                var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+                var::vardef("0".to_string(),
+                            None,
+                            list::mklist(term::Term { str: std::env::args().nth(0).unwrap() },
+                                         None));
+
+                status::exitstatus(match es.flags.cmd.clone() {
+                    Some(cmd) => input::runstring(cmd, None, es.flags),
+                    None => input::runfd(0, Some("stdin".to_string()), &es.flags),
+                })
+            },
+        Err(e) => panic!(e.to_string())
+
         }
-
-        if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
-            let ref file = realopts.free[0];
-            let fd = unsafe {
-                libc::open(CString::new(file.to_string().into_bytes()).unwrap().into_raw(),
-                           0,
-                           libc::O_RDONLY)
-            };
-            if fd == -1 {
-                let mut stderr = io::stderr();
-                writeln!(stderr, "{}: {}\n", file, errno()).unwrap();
-                std::process::exit(1);
-            }
-            var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-            var::vardef("0".to_string(),
-                        None,
-                        list::mklist(term::Term { str: file.clone() }, None));
-            std::process::exit(status::exitstatus(input::runfd(fd, Some(file.clone()), &es.flags)));
-        }
-
-        var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-        var::vardef("0".to_string(),
-                    None,
-                    list::mklist(term::Term { str: std::env::args().nth(0).unwrap() }, None));
-
-        status::exitstatus(match es.flags.cmd.clone() {
-            Some(cmd) => input::runstring(cmd, None, es.flags),
-            None => input::runfd(0, Some("stdin".to_string()), &es.flags),
-        })
     };
 
     if result > 0 {
