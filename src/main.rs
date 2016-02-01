@@ -10,6 +10,7 @@ extern crate errno;
 use errno::errno;
 use libc::c_int;
 mod es;
+use es::Es;
 mod list;
 mod binding;
 mod term;
@@ -152,11 +153,11 @@ fn main() {
     }
 
     let result = {
+        let es = Es::new(runflags, var::Vars::new());
         // roothandler = &_localhandler;	/* unhygeinic */
 
         prim::initprims();
 
-        let vars = var::Vars::new();
         /* dump::runinitial();
          *
          * initpath();
@@ -166,11 +167,11 @@ fn main() {
          * var::initenv(environ, protected);
          * */
 
-        if runflags.loginshell {
+        if es.flags.loginshell {
             // runesrc();
         }
 
-        if runflags.cmd.is_none() && !runflags.cmd_stdin && realopts.free.len() > 0 {
+        if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
             let ref file = realopts.free[0];
             let fd = unsafe {
                 libc::open(CString::new(file.to_string().into_bytes()).unwrap().into_raw(),
@@ -186,7 +187,7 @@ fn main() {
             var::vardef("0".to_string(),
                         None,
                         list::mklist(term::Term { str: file.clone() }, None));
-            std::process::exit(status::exitstatus(input::runfd(fd, Some(file.clone()), &runflags)));
+            std::process::exit(status::exitstatus(input::runfd(fd, Some(file.clone()), &es.flags)));
         }
 
         var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
@@ -194,9 +195,9 @@ fn main() {
                     None,
                     list::mklist(term::Term { str: std::env::args().nth(0).unwrap() }, None));
 
-        status::exitstatus(match runflags.cmd.clone() {
-            Some(cmd) => input::runstring(cmd, None, runflags),
-            None => input::runfd(0, Some("stdin".to_string()), &runflags),
+        status::exitstatus(match es.flags.cmd.clone() {
+            Some(cmd) => input::runstring(cmd, None, es.flags),
+            None => input::runfd(0, Some("stdin".to_string()), &es.flags),
         })
     };
 

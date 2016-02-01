@@ -1,3 +1,5 @@
+use ::var::Vars;
+
 pub struct Flags {
     pub cmd_stdin: bool,
     pub cmd: Option<String>,
@@ -56,5 +58,17 @@ pub enum Tree {
 #[allow(dead_code)]
 pub struct Es {
     #[allow(dead_code)]
-    flags: Flags, // vars: Dict
+    pub flags: Flags,
+    vars: Vars
+}
+
+impl Es {
+    pub fn new(f: Flags, vars: Vars) -> Es {
+        let es = Es {
+            flags: f,
+            vars: vars
+        };
+
+        return es;
+    }
 }
