@@ -3,8 +3,8 @@
 extern crate libc;
 use es;
 use var;
-use term;
-use list::{List, mklist};
+use term::Term;
+use list::List;
 
 #[allow(dead_code)]
 static BUFSIZE: i32 = 1024;
@@ -353,7 +353,7 @@ impl Input {
 
 /// run from an input source
 #[allow(unused_variables)]
-pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List> {
+pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List<Term>> {
 
     let dispatcher = ["fn-%eval-noprint",
                       "fn-%eval-print",
@@ -375,9 +375,9 @@ pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List> {
         }
 
         if runflags.eval_exitonfalse {
-            dispatch = mklist(term::Term { str: "%exit-on-false".to_string() },
-                              Some(*dispatch));
+            dispatch = Box::new(*dispatch.prepend(Term { str: "%exit-on-false".to_string() }));
         }
+
         let push = var::varpush("fn-%dispatch".to_string(), dispatch);
 
         let repl = var::varlookup(if runflags.run_interactive {
@@ -418,7 +418,7 @@ pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List> {
 }
 
 /* runfd -- run commands from a file descriptor */
-pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List> {
+pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List<Term>> {
     let inp = Input {
         prev: None,
         /* buf: &0,
@@ -474,7 +474,7 @@ pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List> {
 
 /// run commands from a string
 #[allow(unused_variables)]
-pub fn runstring(s: String, name: Option<String>, flags: es::Flags) -> Box<List> {
+pub fn runstring(s: String, name: Option<String>, flags: es::Flags) -> Box<List<Term>> {
     Box::new(List::Nil)
 }
 

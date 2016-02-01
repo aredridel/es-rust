@@ -11,6 +11,7 @@ use errno::errno;
 mod es;
 use es::Es;
 mod list;
+use list::List;
 mod binding;
 mod term;
 mod fd;
@@ -149,7 +150,7 @@ fn main() {
                     var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                     var::vardef("0".to_string(),
                                 None,
-                                list::mklist(term::Term { str: file.clone() }, None));
+                                List::Nil.prepend(term::Term { str: file.clone() }));
                     std::process::exit(status::exitstatus(input::runfd(fd,
                                                                        Some(file.clone()),
                                                                        &es.flags)));
@@ -158,8 +159,7 @@ fn main() {
                 var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                 var::vardef("0".to_string(),
                             None,
-                            list::mklist(term::Term { str: std::env::args().nth(0).unwrap() },
-                                         None));
+                            List::Nil.prepend(term::Term { str: std::env::args().nth(0).unwrap() }));
 
                 status::exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

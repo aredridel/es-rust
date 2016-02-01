@@ -1,6 +1,7 @@
 // status manipulations
 
-use list;
+use list::List;
+use term::Term;
 
 // static const Term
 // 	trueterm	= { "0", None },
@@ -15,7 +16,7 @@ use list;
 /// is this status list true?
 #[allow(dead_code)]
 #[allow(unused_variables)]
-pub fn istrue(status: &list::List) -> bool {
+pub fn istrue(status: &List<Term>) -> bool {
     return true;
 }
 // extern Boolean istrue(List *status) {
@@ -35,7 +36,7 @@ pub fn istrue(status: &list::List) -> bool {
 
 /// turn a status list into an exit(2) value
 #[allow(unused_variables)]
-pub fn exitstatus(status: Box<list::List>) -> i32 {
+pub fn exitstatus(status: Box<List<Term>>) -> i32 {
     return 0;
     //     /*
     //     return match status {

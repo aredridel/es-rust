@@ -2,24 +2,23 @@
 
 extern crate libc;
 
-use term;
+use term::Term;
 
-pub enum List {
-    Cons(term::Term, Box<List>),
+pub enum List<T> {
+    Cons(T, Box<List<T>>),
     Nil,
+}
+
+impl<T> List<T> {
+    pub fn prepend(self, term: T) -> Box<List<T>> {
+        return Box::new(List::Cons(term, Box::new(self)));
+    }
 }
 
 // allocation and garbage collector support
 
 // DefineTag(List, static);
 
-pub fn mklist(term: term::Term, next: Option<List>) -> Box<List> {
-    return Box::new(List::Cons(term,
-                               match next {
-                                   None => Box::new(List::Nil),
-                                   Some(fol) => Box::new(fol),
-                               }));
-}
 // extern List *mklist(Term *term, List *next) {
 // 	gcdisable();
 // 	assert(term != NULL);
@@ -97,7 +96,7 @@ pub fn mklist(term: term::Term, next: Option<List>) -> Box<List> {
 // }
 /// turn an argc/argv vector into a list
 #[allow(unused_variables)]
-pub fn listify(argv: Vec<String>) -> Box<List> {
+pub fn listify(argv: Vec<String>) -> Box<List<Term>> {
     Box::new(List::Nil)
 }
 // extern List *listify(int argc, char **argv) {

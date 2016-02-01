@@ -2,6 +2,7 @@
 
 
 use list::List;
+use term::Term;
 use binding;
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -11,7 +12,7 @@ pub struct Push {
     #[allow(dead_code)]
     name: String,
     #[allow(dead_code)]
-    defn: Option<Box<List>>,
+    defn: Option<Box<List<Term>>>,
     #[allow(dead_code)]
     flags: Flags, /* ,
                    * nameroot: Root,
@@ -25,7 +26,7 @@ pub struct Flags {
 
 pub struct Var {
     #[allow(dead_code)]
-    defn: List,
+    defn: List<Term>,
     #[allow(dead_code)]
     flags: Flags,
 }
@@ -151,7 +152,7 @@ pub struct Dict(BTreeMap<String, Var>);
 
 /// lookup a variable in the current context
 #[allow(unused_variables)]
-pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<List> {
+pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<List<Term>> {
     Box::new(List::Nil)
 }
 
@@ -211,7 +212,7 @@ pub fn varlookup(name: String, bp: &Option<binding::Binding>) -> Box<List> {
 // */
 
 #[allow(unused_variables)]
-pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<List>) {}
+pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<List<Term>>) {}
 // /*
 // extern void vardef(char *name, Binding *binding, List *defn) {
 // 	Var *var;
@@ -246,7 +247,7 @@ pub fn vardef(name: String, binding: Option<Box<binding::Binding>>, defn: Box<Li
 // */
 
 #[allow(unused_variables)]
-pub fn varpush(name: String, defn: Box<List>) -> Push {
+pub fn varpush(name: String, defn: Box<List<Term>>) -> Push {
     return Push {
         name: name.to_string(),
         next: None,
