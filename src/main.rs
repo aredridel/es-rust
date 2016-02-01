@@ -5,10 +5,9 @@ extern crate libc;
 use getopts::Options;
 use std::io;
 use std::io::Write;
-use std::ffi::CString;
 extern crate errno;
+use std::ffi::CString;
 use errno::errno;
-use libc::c_int;
 mod es;
 use es::Es;
 mod list;
@@ -20,21 +19,6 @@ mod status;
 mod var;
 mod prim;
 mod eval;
-
-/* checkfd -- open /dev/null on an fd if it is closed */
-fn checkfd(fd: i32, r: u16) {
-    unsafe {
-        let new = libc::dup(fd);
-        if new != -1 {
-            libc::close(new);
-        } else if errno() == errno::Errno(libc::EBADF) {
-            let null = libc::open(CString::new("/dev/null").unwrap().into_raw(), 0, r as c_int);
-            if null != -1i32 {
-                fd::mvfd(new, fd);
-            }
-        }
-    }
-}
 
 /* initpath -- set $path based on the configuration default */
 /* static void initpath(void) {
@@ -112,7 +96,10 @@ fn main() {
 
     let realopts = match opts.parse(&args[1..]) {
         Ok(m) => m,
-        Err(f) => panic!(f.to_string()),
+        Err(f) => {
+            b0rk(opts.usage("es [options] [file [args...]]"));
+            std::process::exit(1);
+        }
     };
 
     let runflags = es::Flags {
@@ -133,23 +120,11 @@ fn main() {
         allowquit: realopts.opt_present("d"),
     };
 
-    if runflags.cmd_stdin && !runflags.cmd.is_none() {
-        panic!("es: -s and -c are incompatible\n");
-    }
-
-    fn b0rk(message: String) {
+    fn b0rk(message: String) -> i32 {
         let mut stderr = io::stderr();
 
         writeln!(stderr, "{}", message).unwrap();
-        std::process::exit(1);
-    }
-
-    b0rk(opts.usage("es [options] [file [args...]]"));
-
-    if !runflags.keepclosed {
-        checkfd(0i32, 0);
-        checkfd(1i32, libc::O_CREAT as u16);
-        checkfd(2i32, libc::O_CREAT as u16);
+        return 1;
     }
 
     let result = {
@@ -190,8 +165,8 @@ fn main() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),
                     None => input::runfd(0, Some("stdin".to_string()), &es.flags),
                 })
-            },
-        Err(e) => panic!(e.to_string())
+            }
+            Err(e) => b0rk(e.to_string()),
 
         }
     };

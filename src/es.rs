@@ -1,5 +1,11 @@
+extern crate libc;
+extern crate errno;
 use var::Vars;
 use std::result::Result;
+use std::ffi::CString;
+use errno::errno;
+use libc::c_int;
+use fd;
 
 pub struct Flags {
     pub cmd_stdin: bool,
@@ -65,6 +71,17 @@ pub struct Es {
 
 impl Es {
     pub fn new(f: Flags, vars: Vars) -> Result<Es, &'static str> {
+        if f.cmd_stdin && !f.cmd.is_none() {
+            return Err("es: -s and -c are incompatible\n");
+        }
+
+        if !f.keepclosed {
+            checkfd(0i32, 0);
+            checkfd(1i32, libc::O_CREAT as u16);
+            checkfd(2i32, libc::O_CREAT as u16);
+        }
+
+
         let es = Es {
             flags: f,
             vars: vars,
@@ -84,5 +101,20 @@ impl Es {
         }
 
         return Ok(es);
+    }
+}
+
+/* checkfd -- open /dev/null on an fd if it is closed */
+fn checkfd(fd: i32, r: u16) {
+    unsafe {
+        let new = libc::dup(fd);
+        if new != -1 {
+            libc::close(new);
+        } else if errno() == errno::Errno(libc::EBADF) {
+            let null = libc::open(CString::new("/dev/null").unwrap().into_raw(), 0, r as c_int);
+            if null != -1i32 {
+                fd::mvfd(new, fd);
+            }
+        }
     }
 }
