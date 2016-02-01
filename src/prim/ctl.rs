@@ -10,7 +10,7 @@ fn seq(lp: &LinkedList<Term> /* , binding: &Binding, evalflags: int */) -> Linke
 
 #[allow(unused_variables)]
 fn _if(lp: &LinkedList<Term>) -> LinkedList<Term> {
-    /* Ref(List *, lp, ::list);
+    /* Ref(List *, lp, list);
      * for (; lp != NULL; lp = lp->next) {
      * List *cond = eval1(lp->term, evalflags & (lp->next == NULL ? eval_inchild : 0));
      * lp = lp->next;
@@ -32,11 +32,11 @@ fn _if(lp: &LinkedList<Term>) -> LinkedList<Term> {
 
 #[allow(unused_variables)]
 fn forever(lp: &LinkedList<Term>) -> LinkedList<Term> {
-    /* Ref(List *, body, ::list);
+    /* Ref(List *, body, list);
      * for (;;)
      * list = eval(body, NULL, evalflags & eval_exitonfalse);
      * RefEnd(body);
-     * return ::list;
+     * return list;
      * */
     return LinkedList::new();
 }
@@ -59,7 +59,7 @@ fn catch(lp: &LinkedList<Term>) -> LinkedList<Term> {
      * fail("$&catch", "usage: catch catcher body");
      *
      * Ref(List *, result, NULL);
-     * Ref(List *, lp, ::list);
+     * Ref(List *, lp, list);
      *
      * do {
      * retry = FALSE;

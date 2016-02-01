@@ -1,3 +1,4 @@
+use list::List;
 // evaluation of lists and trees
 
 // /*
@@ -379,10 +380,10 @@
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval(list0: &::list::List,
+pub fn eval(list0: &List,
             binding0: Option<::binding::Binding>,
             flags: i32)
-            -> ::list::List {
+            -> List {
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
@@ -490,13 +491,13 @@ pub fn eval(list0: &::list::List,
     // 	RefEnd2(funcname, binding);
     // 	RefReturn(list);
     //     */
-    return ::list::List::Nil;
+    return List::Nil;
 }
 
 /// evaluate a term, producing a list
 #[allow(dead_code)]
-pub fn eval1(term: ::term::Term, flags: i32) -> ::list::List {
-    return eval(&::list::List::Cons(term, Box::new(::list::List::Nil)),
+pub fn eval1(term: ::term::Term, flags: i32) -> List {
+    return eval(&List::Cons(term, Box::new(List::Nil)),
                 None,
                 flags);
 }
