@@ -1,6 +1,8 @@
 /* prim.c -- primitives and primitive dispatching ($Revision: 1.1.1.1 $) */
 
 use std::collections::BTreeMap;
+use std::collections::LinkedList;
+use term::Term;
 
 /* static Dict *prims;
  *
@@ -28,7 +30,7 @@ use std::collections::BTreeMap;
 mod ctl;
 
 pub fn initprims() {
-    let mut prims: BTreeMap<String, fn(&::list::List) -> ::list::List> = BTreeMap::new();
+    let mut prims: BTreeMap<String, fn(&LinkedList<Term>) -> LinkedList<Term>> = BTreeMap::new();
     ctl::initprims_controlflow(&mut prims);
     /* prims = initprims_io(prims);
      * prims = initprims_etc(prims);
