@@ -159,7 +159,9 @@ fn main() {
                 var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                 var::vardef("0".to_string(),
                             None,
-                            List::Nil.prepend(term::Term { str: std::env::args().nth(0).unwrap() }));
+                            List::Nil.prepend(term::Term {
+                                str: std::env::args().nth(0).unwrap(),
+                            }));
 
                 status::exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

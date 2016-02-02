@@ -99,7 +99,8 @@ fn catch(lp: &LinkedList<Term>) -> LinkedList<Term> {
     return LinkedList::new();
 }
 
-pub fn initprims_controlflow(prims: &mut BTreeMap<String, fn(&LinkedList<Term>) -> LinkedList<Term>>) {
+pub fn initprims_controlflow(prims: &mut BTreeMap<String,
+                                                  fn(&LinkedList<Term>) -> LinkedList<Term>>) {
     prims.insert("seq".to_string(), seq);
     prims.insert("if".to_string(), _if);
     prims.insert("throw".to_string(), throw);

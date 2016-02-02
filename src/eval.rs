@@ -381,10 +381,7 @@ use term::Term;
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval(list0: &List<Term>,
-            binding0: Option<::binding::Binding>,
-            flags: i32)
-            -> List<Term> {
+pub fn eval(list0: &List<Term>, binding0: Option<::binding::Binding>, flags: i32) -> List<Term> {
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
@@ -498,9 +495,7 @@ pub fn eval(list0: &List<Term>,
 /// evaluate a term, producing a list
 #[allow(dead_code)]
 pub fn eval1(term: ::term::Term, flags: i32) -> List<Term> {
-    return eval(&List::Cons(term, Box::new(List::Nil)),
-                None,
-                flags);
+    return eval(&List::Cons(term, Box::new(List::Nil)), None, flags);
 }
 // /*
 // extern List *eval1(Term *term, int flags) {
