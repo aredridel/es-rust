@@ -351,9 +351,10 @@ impl Input {
 // 	error = None;
 // }
 
+impl Es {
 /// run from an input source
 #[allow(unused_variables)]
-pub fn runinput(mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
+pub fn runinput(&self, mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
 
     let dispatcher = ["fn-%eval-noprint",
                       "fn-%eval-print",
@@ -417,7 +418,6 @@ pub fn runinput(mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
     }
 }
 
-impl Es {
     /* runfd -- run commands from a file descriptor */
     pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Box<List<Term>> {
         let inp = Input {
@@ -456,7 +456,7 @@ impl Es {
         // in.bufbegin = in.buf = ealloc(in.buflen);
 
         // RefAdd(inp.name);
-        let result = runinput(Box::new(inp), runflags);
+        let result = self.runinput(Box::new(inp), runflags);
         // RefRemove(inp.name);
 
         return result;
