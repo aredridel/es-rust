@@ -1,7 +1,7 @@
 // read input from files or strings
 
 extern crate libc;
-use es;
+use es::{Flags, Es};
 use var;
 use term::Term;
 use list::List;
@@ -21,7 +21,7 @@ pub struct Input {
     //     ungot: int,
     pub lineno: i32,
     pub fd: i32,
-    pub runflags: es::Flags,
+    pub runflags: Flags,
 }
 
 impl Input {
@@ -353,7 +353,7 @@ impl Input {
 
 /// run from an input source
 #[allow(unused_variables)]
-pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List<Term>> {
+pub fn runinput(mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
 
     let dispatcher = ["fn-%eval-noprint",
                       "fn-%eval-print",
@@ -417,48 +417,50 @@ pub fn runinput(mut inp: Box<Input>, runflags: &es::Flags) -> Box<List<Term>> {
     }
 }
 
-/* runfd -- run commands from a file descriptor */
-pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List<Term>> {
-    let inp = Input {
-        prev: None,
-        /* buf: &0,
-         * rbuf: &0,
-         * buflen: BUFSIZE as u64,
-         * bufbegin: &0,
-         * bufend: &0,
-         * unget: [0, 0],
-         * ungot: 0,
-         * */
-        runflags: es::Flags {
-            run_interactive: true,
-            cmd_stdin: false,
-            cmd: Some("".to_string()),
-            eval_exitonfalse: false,
-            eval_inchild: false,
-            run_noexec: false,
-            run_echoinput: false,
-            run_printcmds: false,
-            loginshell: false,
-            protected: false,
-            keepclosed: false,
-            allowquit: false,
-        },
-        lineno: 1,
-        fd: fd,
-        name: match name {
-            None => Some(format!("fd {}", fd).to_string()),
-            Some(n) => Some(n),
-        },
-    };
+impl Es {
+    /* runfd -- run commands from a file descriptor */
+    pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Box<List<Term>> {
+        let inp = Input {
+            prev: None,
+            /* buf: &0,
+             * rbuf: &0,
+             * buflen: BUFSIZE as u64,
+             * bufbegin: &0,
+             * bufend: &0,
+             * unget: [0, 0],
+             * ungot: 0,
+             * */
+            runflags: Flags {
+                run_interactive: true,
+                cmd_stdin: false,
+                cmd: Some("".to_string()),
+                eval_exitonfalse: false,
+                eval_inchild: false,
+                run_noexec: false,
+                run_echoinput: false,
+                run_printcmds: false,
+                loginshell: false,
+                protected: false,
+                keepclosed: false,
+                allowquit: false,
+            },
+            lineno: 1,
+            fd: fd,
+            name: match name {
+                None => Some(format!("fd {}", fd).to_string()),
+                Some(n) => Some(n),
+            },
+        };
 
-    // registerfd(&inp.fd, TRUE);
-    // in.bufbegin = in.buf = ealloc(in.buflen);
+        // registerfd(&inp.fd, TRUE);
+        // in.bufbegin = in.buf = ealloc(in.buflen);
 
-    // RefAdd(inp.name);
-    let result = runinput(Box::new(inp), runflags);
-    // RefRemove(inp.name);
+        // RefAdd(inp.name);
+        let result = runinput(Box::new(inp), runflags);
+        // RefRemove(inp.name);
 
-    return result;
+        return result;
+    }
 }
 
 // /* stringcleanup -- cleanup after running from a string */
@@ -474,7 +476,7 @@ pub fn runfd(fd: i32, name: Option<String>, runflags: &es::Flags) -> Box<List<Te
 
 /// run commands from a string
 #[allow(unused_variables)]
-pub fn runstring(s: String, name: Option<String>, flags: es::Flags) -> Box<List<Term>> {
+pub fn runstring(s: String, name: Option<String>, flags: Flags) -> Box<List<Term>> {
     Box::new(List::Nil)
 }
 

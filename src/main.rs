@@ -151,7 +151,7 @@ fn main() {
                     var::vardef("0".to_string(),
                                 None,
                                 List::Nil.prepend(term::Term { str: file.clone() }));
-                    std::process::exit(status::exitstatus(input::runfd(fd,
+                    std::process::exit(status::exitstatus(es.runfd(fd,
                                                                        Some(file.clone()),
                                                                        &es.flags)));
                 }
@@ -163,7 +163,7 @@ fn main() {
 
                 status::exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),
-                    None => input::runfd(0, Some("stdin".to_string()), &es.flags),
+                    None => es.runfd(0, Some("stdin".to_string()), &es.flags),
                 })
             }
             Err(e) => b0rk(e.to_string()),
