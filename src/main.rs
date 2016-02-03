@@ -17,6 +17,7 @@ mod term;
 mod fd;
 mod input;
 mod status;
+use status::exitstatus;
 mod var;
 mod prim;
 mod eval;
@@ -51,7 +52,7 @@ mod eval;
  * runfd(fd, esrc, 0);
  * CatchException (e)
  * if (termeq(e->term, "exit"))
- * exit(status::exitstatus(e->next));
+ * exit(exitstatus(e->next));
  * else if (termeq(e->term, "error"))
  * eprint("%L\n",
  * e->next == None ? None : e->next->next,
@@ -151,9 +152,7 @@ fn main() {
                     var::vardef("0".to_string(),
                                 None,
                                 List::cell(term::Term { str: file.clone() }));
-                    std::process::exit(status::exitstatus(es.runfd(fd,
-                                                                   Some(file.clone()),
-                                                                   &es.flags)));
+                    std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
                 var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
@@ -161,7 +160,7 @@ fn main() {
                             None,
                             List::cell(term::Term { str: std::env::args().nth(0).unwrap() }));
 
-                status::exitstatus(match es.flags.cmd.clone() {
+                exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),
                     None => es.runfd(0, Some("stdin".to_string()), &es.flags),
                 })
@@ -173,7 +172,7 @@ fn main() {
 
     if result > 0 {
         /* if (termeq(e->term, "exit"))
-         * return status::exitstatus(e->next);
+         * return exitstatus(e->next);
          * else if (termeq(e->term, "error"))
          * eprint("%L\n",
          * e->next == None ? None : e->next->next,

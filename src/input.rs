@@ -1,7 +1,7 @@
 // read input from files or strings
 
 extern crate libc;
-use es::{Flags, Es};
+use es::{Es, Flags};
 use var;
 use term::Term;
 use list::List;
