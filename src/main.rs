@@ -12,13 +12,13 @@ mod es;
 use es::Es;
 mod list;
 use list::List;
-mod binding;
+mod var;
+use var::{Binding, Vars};
 mod term;
 mod fd;
 mod input;
 mod status;
 use status::exitstatus;
-mod var;
 mod prim;
 mod eval;
 
@@ -130,8 +130,8 @@ fn main() {
     }
 
     let result = {
-        match Es::new(runflags, var::Vars::new()) {
-            Ok(es) => {
+        match Es::new(runflags, Vars::new()) {
+            Ok(mut es) => {
                 // roothandler = &_localhandler;	/* unhygeinic */
 
                 if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
@@ -146,17 +146,17 @@ fn main() {
                         writeln!(stderr, "{}: {}\n", file, errno()).unwrap();
                         std::process::exit(1);
                     }
-                    var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                    var::vardef("0".to_string(),
-                                None,
-                                List::cell(term::Term { str: file.clone() }));
+                    Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+                    Binding::vardef("0".to_string(),
+                                    None,
+                                    List::cell(term::Term { str: file.clone() }));
                     std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
-                var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                var::vardef("0".to_string(),
-                            None,
-                            List::cell(term::Term { str: std::env::args().nth(0).unwrap() }));
+                Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
+                Binding::vardef("0".to_string(),
+                                None,
+                                List::cell(term::Term { str: std::env::args().nth(0).unwrap() }));
 
                 exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

@@ -1,5 +1,6 @@
 use list::List;
 use term::Term;
+use var::Binding;
 // evaluation of lists and trees
 
 // /*
@@ -381,7 +382,7 @@ use term::Term;
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval(list0: &List<Term>, binding0: Option<::binding::Binding>, flags: i32) -> List<Term> {
+pub fn eval(list0: &List<Term>, binding0: Option<Binding>, flags: i32) -> List<Term> {
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
