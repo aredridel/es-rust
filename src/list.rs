@@ -10,8 +10,12 @@ pub enum List<T> {
 }
 
 impl<T> List<T> {
-    pub fn prepend(self, term: T) -> Box<List<T>> {
-        return Box::new(List::Cons(term, Box::new(self)));
+    pub fn cons(term: T, l: List<T>) -> Box<List<T>> {
+        return Box::new(List::Cons(term, Box::new(l)));
+    }
+
+    pub fn cell(term: T) -> Box<List<T>> {
+        return Box::new(List::Cons(term, Box::new(List::Nil)));
     }
 }
 

@@ -376,7 +376,7 @@ pub fn runinput(&self, mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>>
         }
 
         if runflags.eval_exitonfalse {
-            dispatch = Box::new(*dispatch.prepend(Term { str: "%exit-on-false".to_string() }));
+            dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, *dispatch);
         }
 
         let push = var::varpush("fn-%dispatch".to_string(), dispatch);
