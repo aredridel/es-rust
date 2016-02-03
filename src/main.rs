@@ -152,16 +152,14 @@ fn main() {
                                 None,
                                 List::cell(term::Term { str: file.clone() }));
                     std::process::exit(status::exitstatus(es.runfd(fd,
-                                                                       Some(file.clone()),
-                                                                       &es.flags)));
+                                                                   Some(file.clone()),
+                                                                   &es.flags)));
                 }
 
                 var::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                 var::vardef("0".to_string(),
                             None,
-                            List::cell(term::Term {
-                                str: std::env::args().nth(0).unwrap(),
-                            }));
+                            List::cell(term::Term { str: std::env::args().nth(0).unwrap() }));
 
                 status::exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

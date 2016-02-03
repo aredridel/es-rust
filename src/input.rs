@@ -352,71 +352,71 @@ impl Input {
 // }
 
 impl Es {
-/// run from an input source
-#[allow(unused_variables)]
-pub fn runinput(&self, mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
+    /// run from an input source
+    #[allow(unused_variables)]
+    pub fn runinput(&self, mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
 
-    let dispatcher = ["fn-%eval-noprint",
-                      "fn-%eval-print",
-                      "fn-%noeval-noprint",
-                      "fn-%noeval-print"];
+        let dispatcher = ["fn-%eval-noprint",
+                          "fn-%eval-print",
+                          "fn-%noeval-noprint",
+                          "fn-%noeval-print"];
 
-    inp.runflags = runflags.clone();
-    inp.runflags.eval_inchild = true;
-    // inp.prev = Some(input);
+        inp.runflags = runflags.clone();
+        inp.runflags.eval_inchild = true;
+        // inp.prev = Some(input);
 
-    match {
-        let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } +
-                                    if runflags.run_noexec { 2 } else { 0 }];
-        let mut dispatch = var::varlookup(dispatchfn.to_string(), &None);
+        match {
+            let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } +
+                                        if runflags.run_noexec { 2 } else { 0 }];
+            let mut dispatch = var::varlookup(dispatchfn.to_string(), &None);
 
-        match *dispatch {
-            List::Nil => panic!("no dispatch found in '{}'", dispatchfn),
-            List::Cons(ref term, ref next) => {}
-        }
-
-        if runflags.eval_exitonfalse {
-            dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, *dispatch);
-        }
-
-        let push = var::varpush("fn-%dispatch".to_string(), dispatch);
-
-        let repl = var::varlookup(if runflags.run_interactive {
-                                      "fn-%interactive-loop"
-                                  } else {
-                                      "fn-%batch-loop"
-                                  }
-                                  .to_string(),
-                                  &None);
-        let result = match *repl {
-            List::Nil => {
-                Err("")
-                // prim("batchloop", None, None, runflags)
+            match *dispatch {
+                List::Nil => panic!("no dispatch found in '{}'", dispatchfn),
+                List::Cons(ref term, ref next) => {}
             }
-            List::Cons(ref term, ref next) => {
-                Err("")
-                // Ok(List::Nil) as Result<List, String>
-                // eval(repl, None, runflags)
+
+            if runflags.eval_exitonfalse {
+                dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, *dispatch);
             }
-        };
 
-        var::varpop(push);
+            let push = var::varpush("fn-%dispatch".to_string(), dispatch);
 
-        result
+            let repl = var::varlookup(if runflags.run_interactive {
+                                          "fn-%interactive-loop"
+                                      } else {
+                                          "fn-%batch-loop"
+                                      }
+                                      .to_string(),
+                                      &None);
+            let result = match *repl {
+                List::Nil => {
+                    Err("")
+                    // prim("batchloop", None, None, runflags)
+                }
+                List::Cons(ref term, ref next) => {
+                    Err("")
+                    // Ok(List::Nil) as Result<List, String>
+                    // eval(repl, None, runflags)
+                }
+            };
 
-    } {
-        Err(e) => {
-            // input.cleanup();
-            // input = input.prev;
-            panic!(e);
-        }
-        Ok(res) => {
-            // input = inp.prev;
-            inp.cleanup();
-            return Box::new(res);
+            var::varpop(push);
+
+            result
+
+        } {
+            Err(e) => {
+                // input.cleanup();
+                // input = input.prev;
+                panic!(e);
+            }
+            Ok(res) => {
+                // input = inp.prev;
+                inp.cleanup();
+                return Box::new(res);
+            }
         }
     }
-}
 
     /* runfd -- run commands from a file descriptor */
     pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Box<List<Term>> {
