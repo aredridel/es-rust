@@ -134,8 +134,6 @@ fn main() {
             Ok(es) => {
                 // roothandler = &_localhandler;	/* unhygeinic */
 
-                prim::initprims();
-
                 if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
                     let ref file = realopts.free[0];
                     let fd = unsafe {

@@ -6,6 +6,7 @@ use std::ffi::CString;
 use errno::errno;
 use libc::c_int;
 use fd;
+use prim;
 
 pub struct Flags {
     pub cmd_stdin: bool,
@@ -99,6 +100,8 @@ impl Es {
         if es.flags.loginshell {
             // runesrc();
         }
+
+        prim::initprims();
 
         return Ok(es);
     }
