@@ -368,7 +368,7 @@ impl Es {
         match {
             let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } +
                                         if runflags.run_noexec { 2 } else { 0 }];
-            let mut dispatch = Binding::varlookup(dispatchfn.to_string(), &None);
+            let mut dispatch = self.vars.varlookup(dispatchfn.to_string(), &None);
 
             match *dispatch {
                 List::Nil => panic!("no dispatch found in '{}'", dispatchfn),
@@ -381,7 +381,7 @@ impl Es {
 
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
 
-            let repl = Binding::varlookup(if runflags.run_interactive {
+            let repl = self.vars.varlookup(if runflags.run_interactive {
                                               "fn-%interactive-loop"
                                           } else {
                                               "fn-%batch-loop"

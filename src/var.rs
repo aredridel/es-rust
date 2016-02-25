@@ -156,11 +156,6 @@ impl Binding {
     // }
     // */
 
-    /// lookup a variable in the current context
-    #[allow(unused_variables)]
-    pub fn varlookup(name: String, bp: &Option<Binding>) -> Box<List<Term>> {
-        Box::new(List::Nil)
-    }
 
     // /*
     // extern List *varlookup(const char *name, Binding *bp) {
@@ -518,5 +513,11 @@ impl Vars {
             env: BTreeMap::new(),
             noexport: BTreeSet::new(),
         };
+    }
+
+    /// lookup a variable in the current context
+    #[allow(unused_variables)]
+    pub fn varlookup(&self, name: String, bp: &Option<Binding>) -> Box<List<Term>> {
+        Box::new(List::Nil)
     }
 }

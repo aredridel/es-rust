@@ -67,7 +67,7 @@ pub enum Tree {
 pub struct Es {
     #[allow(dead_code)]
     pub flags: Flags,
-    vars: Vars,
+    pub vars: Vars,
 }
 
 impl Es {
