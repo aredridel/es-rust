@@ -368,7 +368,7 @@ impl Es {
         match {
             let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } +
                                         if runflags.run_noexec { 2 } else { 0 }];
-            let mut dispatch = self.vars.varlookup(dispatchfn.to_string(), &None);
+            let mut dispatch = self.vars.varlookup(dispatchfn.to_string());
 
             match *dispatch {
                 List::Nil => panic!("no dispatch found in '{}'", dispatchfn),
@@ -386,8 +386,7 @@ impl Es {
                                           } else {
                                               "fn-%batch-loop"
                                           }
-                                          .to_string(),
-                                          &None);
+                                          .to_string());
             let result = match *repl {
                 List::Nil => {
                     Err("")

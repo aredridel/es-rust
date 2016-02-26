@@ -517,13 +517,13 @@ impl Vars {
 }
 
 pub trait VarLookup {
-    fn varlookup(&self, name: String, bp: &Option<Binding>) -> Box<List<Term>>;
+    fn varlookup(&self, name: String) -> Box<List<Term>>;
 }
 
 impl VarLookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn varlookup(&self, name: String, bp: &Option<Binding>) -> Box<List<Term>> {
+    fn varlookup(&self, name: String) -> Box<List<Term>> {
         Box::new(List::Nil)
     }
 }
@@ -531,7 +531,7 @@ impl VarLookup for Vars {
 impl VarLookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn varlookup(&self, name: String, bp: &Option<Binding>) -> Box<List<Term>> {
+    fn varlookup(&self, name: String) -> Box<List<Term>> {
         Box::new(List::Nil)
     }
 }
