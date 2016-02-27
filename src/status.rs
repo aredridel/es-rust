@@ -2,6 +2,7 @@
 
 use list::List;
 use term::Term;
+use std::rc::Rc;
 
 // static const Term
 // 	trueterm	= { "0", None },
@@ -36,7 +37,7 @@ pub fn istrue(status: &List<Term>) -> bool {
 
 /// turn a status list into an exit(2) value
 #[allow(unused_variables)]
-pub fn exitstatus(status: Box<List<Term>>) -> i32 {
+pub fn exitstatus(status: Rc<List<Term>>) -> i32 {
     return 0;
     //     /*
     //     return match status {

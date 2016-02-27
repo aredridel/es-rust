@@ -1,23 +1,24 @@
 use list::List;
 use term::Term;
 use std::collections::{BTreeMap, BTreeSet};
+use std::rc::Rc;
 
 pub struct Binding {
     #[allow(dead_code)]
     name: String,
     #[allow(dead_code)]
-    defn: Box<List<Term>>,
+    defn: Rc<List<Term>>,
     #[allow(dead_code)]
-    next: Option<Box<Binding>>,
+    next: Option<Rc<Binding>>,
 }
 
 pub struct Push {
     #[allow(dead_code)]
-    next: Option<Box<Push>>,
+    next: Option<Rc<Push>>,
     #[allow(dead_code)]
     name: String,
     #[allow(dead_code)]
-    defn: Option<Box<List<Term>>>,
+    defn: Option<Rc<List<Term>>>,
     #[allow(dead_code)]
     flags: Flags, /* ,
                    * nameroot: Root,
@@ -213,7 +214,7 @@ impl Binding {
     // */
 
     #[allow(unused_variables)]
-    pub fn vardef(name: String, binding: Option<Box<Binding>>, defn: Box<List<Term>>) {}
+    pub fn vardef(name: String, binding: Option<Rc<Binding>>, defn: Rc<List<Term>>) {}
     // /*
     // extern void vardef(char *name, Binding *binding, List *defn) {
     // 	Var *var;
@@ -248,7 +249,7 @@ impl Binding {
     // */
 
     #[allow(unused_variables)]
-    pub fn varpush(name: String, defn: Box<List<Term>>) -> Push {
+    pub fn varpush(name: String, defn: Rc<List<Term>>) -> Push {
         return Push {
             name: name.to_string(),
             next: None,
@@ -517,21 +518,21 @@ impl Vars {
 }
 
 pub trait VarLookup {
-    fn varlookup(&self, name: String) -> Box<List<Term>>;
+    fn varlookup(&self, name: String) -> Rc<List<Term>>;
 }
 
 impl VarLookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn varlookup(&self, name: String) -> Box<List<Term>> {
-        Box::new(List::Nil)
+    fn varlookup(&self, name: String) -> Rc<List<Term>> {
+        Rc::new(List::Nil)
     }
 }
 
 impl VarLookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn varlookup(&self, name: String) -> Box<List<Term>> {
-        Box::new(List::Nil)
+    fn varlookup(&self, name: String) -> Rc<List<Term>> {
+        Rc::new(List::Nil)
     }
 }

@@ -3,6 +3,7 @@
 extern crate libc;
 use es::{Es, Flags};
 use var::{Binding,VarLookup};
+use std::rc::Rc;
 use term::Term;
 use list::List;
 
@@ -10,7 +11,7 @@ use list::List;
 static BUFSIZE: i32 = 1024;
 
 pub struct Input {
-    pub prev: Option<Box<Input>>,
+    pub prev: Option<Rc<Input>>,
     pub name: Option<String>,
     //     buf: *mut libc::c_char,
     //     bufend: *mut libc::c_char,
@@ -354,7 +355,7 @@ impl Input {
 impl Es {
     /// run from an input source
     #[allow(unused_variables)]
-    pub fn runinput(&self, mut inp: Box<Input>, runflags: &Flags) -> Box<List<Term>> {
+    pub fn runinput(&self, mut inp: Input, runflags: &Flags) -> Rc<List<Term>> {
 
         let dispatcher = ["fn-%eval-noprint",
                           "fn-%eval-print",
@@ -376,7 +377,7 @@ impl Es {
             }
 
             if runflags.eval_exitonfalse {
-                dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, *dispatch);
+                dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, dispatch);
             }
 
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
@@ -412,13 +413,13 @@ impl Es {
             Ok(res) => {
                 // input = inp.prev;
                 inp.cleanup();
-                return Box::new(res);
+                return Rc::new(res);
             }
         }
     }
 
     /* runfd -- run commands from a file descriptor */
-    pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Box<List<Term>> {
+    pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Rc<List<Term>> {
         let inp = Input {
             prev: None,
             /* buf: &0,
@@ -455,7 +456,7 @@ impl Es {
         // in.bufbegin = in.buf = ealloc(in.buflen);
 
         // RefAdd(inp.name);
-        let result = self.runinput(Box::new(inp), runflags);
+        let result = self.runinput(inp, runflags);
         // RefRemove(inp.name);
 
         return result;
@@ -475,8 +476,8 @@ impl Es {
 
 /// run commands from a string
 #[allow(unused_variables)]
-pub fn runstring(s: String, name: Option<String>, flags: Flags) -> Box<List<Term>> {
-    Box::new(List::Nil)
+pub fn runstring(s: String, name: Option<String>, flags: Flags) -> Rc<List<Term>> {
+    Rc::new(List::Nil)
 }
 
 // extern List *runstring(const char *str, const char *name, int flags) {

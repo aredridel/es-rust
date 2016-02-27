@@ -3,19 +3,20 @@
 extern crate libc;
 
 use term::Term;
+use std::rc::Rc;
 
 pub enum List<T> {
-    Cons(T, Box<List<T>>),
+    Cons(T, Rc<List<T>>),
     Nil,
 }
 
 impl<T> List<T> {
-    pub fn cons(term: T, l: List<T>) -> Box<List<T>> {
-        return Box::new(List::Cons(term, Box::new(l)));
+    pub fn cons(term: T, l: Rc<List<T>>) -> Rc<List<T>> {
+        return Rc::new(List::Cons(term, l));
     }
 
-    pub fn cell(term: T) -> Box<List<T>> {
-        return Box::new(List::Cons(term, Box::new(List::Nil)));
+    pub fn cell(term: T) -> Rc<List<T>> {
+        return Rc::new(List::Cons(term, Rc::new(List::Nil)));
     }
 }
 
@@ -100,8 +101,8 @@ impl<T> List<T> {
 // }
 /// turn an argc/argv vector into a list
 #[allow(unused_variables)]
-pub fn listify(argv: Vec<String>) -> Box<List<Term>> {
-    Box::new(List::Nil)
+pub fn listify(argv: Vec<String>) -> Rc<List<Term>> {
+    Rc::new(List::Nil)
 }
 // extern List *listify(int argc, char **argv) {
 // 	Ref(List *, list, NULL);

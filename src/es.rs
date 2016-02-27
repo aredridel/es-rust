@@ -3,6 +3,7 @@ extern crate errno;
 use var::Vars;
 use std::result::Result;
 use std::ffi::CString;
+use std::rc::Rc;
 use errno::errno;
 use libc::c_int;
 use fd;
@@ -48,19 +49,19 @@ pub enum Tree {
     Word(u32),
     Qword(u64),
     Prim(String),
-    Call(Box<Tree>),
-    Thunk(Box<Tree>),
-    Var(Box<Tree>),
-    Assign(Box<Tree>, Box<Tree>),
-    Concat(Box<Tree>, Box<Tree>),
-    Closure(Box<Tree>, Box<Tree>),
-    For(Box<Tree>, Box<Tree>),
-    Lambda(Box<Tree>, Box<Tree>),
-    Varsub(Box<Tree>, Box<Tree>),
-    Match(Box<Tree>, Box<Tree>),
-    Extract(Box<Tree>, Box<Tree>),
-    Redir(Box<Tree>, Box<Tree>),
-    Pipe(Box<Tree>, Box<Tree>),
+    Call(Rc<Tree>),
+    Thunk(Rc<Tree>),
+    Var(Rc<Tree>),
+    Assign(Rc<Tree>, Rc<Tree>),
+    Concat(Rc<Tree>, Rc<Tree>),
+    Closure(Rc<Tree>, Rc<Tree>),
+    For(Rc<Tree>, Rc<Tree>),
+    Lambda(Rc<Tree>, Rc<Tree>),
+    Varsub(Rc<Tree>, Rc<Tree>),
+    Match(Rc<Tree>, Rc<Tree>),
+    Extract(Rc<Tree>, Rc<Tree>),
+    Redir(Rc<Tree>, Rc<Tree>),
+    Pipe(Rc<Tree>, Rc<Tree>),
 }
 
 #[allow(dead_code)]

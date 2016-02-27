@@ -1,6 +1,7 @@
 use list::List;
 use term::Term;
 use var::Binding;
+use std::rc::Rc;
 // evaluation of lists and trees
 
 // /*
@@ -496,7 +497,7 @@ pub fn eval(list0: &List<Term>, binding0: Option<Binding>, flags: i32) -> List<T
 /// evaluate a term, producing a list
 #[allow(dead_code)]
 pub fn eval1(term: ::term::Term, flags: i32) -> List<Term> {
-    return eval(&List::Cons(term, Box::new(List::Nil)), None, flags);
+    return eval(&List::Cons(term, Rc::new(List::Nil)), None, flags);
 }
 // /*
 // extern List *eval1(Term *term, int flags) {
