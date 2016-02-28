@@ -503,7 +503,7 @@ impl Binding {
 
 #[allow(dead_code)]
 pub struct Vars {
-    env: HashMap<String, String>,
+    env: HashMap<String, Rc<List<Term>>>,
     noexport: BTreeSet<String>,
 }
 
