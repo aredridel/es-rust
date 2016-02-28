@@ -8,6 +8,7 @@ use errno::errno;
 use libc::c_int;
 use fd;
 use prim;
+use initial::runinitial;
 
 pub struct Flags {
     pub cmd_stdin: bool,
@@ -72,7 +73,7 @@ pub struct Es {
 }
 
 impl Es {
-    pub fn new(f: Flags, vars: Vars) -> Result<Es, &'static str> {
+    pub fn new(f: Flags, mut vars: Vars) -> Result<Es, &'static str> {
         if f.cmd_stdin && !f.cmd.is_none() {
             return Err("es: -s and -c are incompatible\n");
         }
@@ -83,6 +84,7 @@ impl Es {
             checkfd(2i32, libc::O_CREAT as u16);
         }
 
+        vars = runinitial(vars);
 
         let es = Es {
             flags: f,

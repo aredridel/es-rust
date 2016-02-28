@@ -21,6 +21,7 @@ mod status;
 use status::exitstatus;
 mod prim;
 mod eval;
+mod initial;
 
 /* initpath -- set $path based on the configuration default */
 /* static void initpath(void) {
