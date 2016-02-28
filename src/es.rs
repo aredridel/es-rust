@@ -91,8 +91,7 @@ impl Es {
             vars: vars,
         };
 
-        /* dump::runinitial();
-         *
+        /* 
          * initpath();
          * initpid();
          * signal::initsignals(runflags & run_interactive, allowquit);
