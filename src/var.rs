@@ -517,11 +517,11 @@ impl Vars {
     }
 }
 
-pub trait VarLookup {
+pub trait Lookup {
     fn varlookup(&self, name: String) -> Rc<List<Term>>;
 }
 
-impl VarLookup for Vars {
+impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
     fn varlookup(&self, name: String) -> Rc<List<Term>> {
@@ -529,7 +529,7 @@ impl VarLookup for Vars {
     }
 }
 
-impl VarLookup for Binding {
+impl Lookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
     fn varlookup(&self, name: String) -> Rc<List<Term>> {
