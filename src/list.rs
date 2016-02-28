@@ -24,16 +24,6 @@ impl<T> List<T> {
 
 // DefineTag(List, static);
 
-// extern List *mklist(Term *term, List *next) {
-// 	gcdisable();
-// 	assert(term != NULL);
-// 	Ref(List *, list, gcnew(List));
-// 	list->term = term;
-// 	list->next = next;
-// 	gcenable();
-// 	RefReturn(list);
-// }
-//
 // static void *ListCopy(void *op) {
 // 	void *np = gcnew(List);
 // 	memcpy(np, op, sizeof (List));
