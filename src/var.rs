@@ -1,6 +1,6 @@
 use list::List;
 use term::Term;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{HashMap, BTreeSet};
 use std::rc::Rc;
 
 pub struct Binding {
@@ -38,7 +38,7 @@ pub struct Var {
 }
 
 #[allow(dead_code)]
-pub struct Dict(BTreeMap<String, Var>);
+pub struct Dict(HashMap<String, Var>);
 
 impl Binding {
     // /*
@@ -503,7 +503,7 @@ impl Binding {
 
 #[allow(dead_code)]
 pub struct Vars {
-    env: BTreeMap<String, String>,
+    env: HashMap<String, String>,
     noexport: BTreeSet<String>,
 }
 
@@ -511,7 +511,7 @@ impl Vars {
     /// initialize the variable machinery
     pub fn new() -> Vars {
         return Vars {
-            env: BTreeMap::new(),
+            env: HashMap::new(),
             noexport: BTreeSet::new(),
         };
     }
