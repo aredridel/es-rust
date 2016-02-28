@@ -131,7 +131,7 @@ fn main() {
 
     let result = {
         match Es::new(runflags, Vars::new()) {
-            Ok(mut es) => {
+            Ok(es) => {
                 // roothandler = &_localhandler;	/* unhygeinic */
 
                 if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
