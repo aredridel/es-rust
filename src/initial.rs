@@ -1,6 +1,5 @@
-use var::{Vars,Lookup};
+use var::{Lookup, Vars};
 use list::List;
-use std::rc::Rc;
 use term::Term;
 
 pub fn runinitial(mut vars: Vars) -> Vars {

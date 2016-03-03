@@ -91,8 +91,7 @@ impl Es {
             vars: vars,
         };
 
-        /* 
-         * initpath();
+        /* initpath();
          * initpid();
          * signal::initsignals(runflags & run_interactive, allowquit);
          * var::hidevariables();

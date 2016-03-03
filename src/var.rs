@@ -1,6 +1,6 @@
 use list::List;
 use term::Term;
-use std::collections::{HashMap, BTreeSet};
+use std::collections::{BTreeSet, HashMap};
 use std::rc::Rc;
 
 pub struct Binding {
@@ -527,11 +527,7 @@ impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
     fn lookup(&self, name: &String) -> Rc<List<Term>> {
-        if let Some(var) = self.env.get(name) {
-            (*var).clone()
-        } else {
-            Rc::new(List::Nil)
-        }
+        if let Some(var) = self.env.get(name) { (*var).clone() } else { Rc::new(List::Nil) }
     }
 
     fn insert(&mut self, name: String, value: Rc<List<Term>>) {
