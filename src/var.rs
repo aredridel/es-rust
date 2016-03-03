@@ -518,7 +518,7 @@ impl Vars {
 }
 
 pub trait Lookup {
-    fn lookup(&self, name: &String) -> Rc<List<Term>>;
+    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>>;
 
     fn insert(&mut self, name: String, value: Rc<List<Term>>);
 }
@@ -526,20 +526,23 @@ pub trait Lookup {
 impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Rc<List<Term>> {
-        if let Some(var) = self.env.get(name) { (*var).clone() } else { Rc::new(List::Nil) }
+    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>> {
+        match self.env.get(name) {
+            Some(x) => Some(x.clone()),
+            None => None,
+        }
     }
 
     fn insert(&mut self, name: String, value: Rc<List<Term>>) {
-        let x = self.env.insert(name, value);
+        self.env.insert(name, value);
     }
 }
 
 impl Lookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Rc<List<Term>> {
-        Rc::new(List::Nil)
+    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>> {
+        None
     }
 
     #[allow(unused_variables)]

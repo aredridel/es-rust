@@ -369,12 +369,10 @@ impl Es {
         match {
             let dispatchfn = dispatcher[if runflags.run_printcmds { 1 } else { 0 } +
                                         if runflags.run_noexec { 2 } else { 0 }];
-            let mut dispatch = self.vars.lookup(&dispatchfn.to_string());
-
-            match *dispatch {
-                List::Nil => panic!("no dispatch found in '{}'", dispatchfn),
-                List::Cons(ref term, ref next) => {}
-            }
+            let mut dispatch = match self.vars.lookup(&dispatchfn.to_string()) {
+                Some(l) => l,
+                None => panic!("no dispatch found in '{}'", dispatchfn),
+            };
 
             if runflags.eval_exitonfalse {
                 dispatch = List::cons(Term { str: "%exit-on-false".to_string() }, dispatch);
@@ -382,22 +380,14 @@ impl Es {
 
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
 
-            let repl = self.vars.lookup(&if runflags.run_interactive {
-                                             "fn-%interactive-loop"
-                                         } else {
-                                             "fn-%batch-loop"
-                                         }
-                                         .to_string());
-            let result = match *repl {
-                List::Nil => {
-                    Err("")
-                    // prim("batchloop", None, None, runflags)
-                }
-                List::Cons(ref term, ref next) => {
-                    Err("")
-                    // Ok(List::Nil) as Result<List, String>
-                    // eval(repl, None, runflags)
-                }
+            let result = match self.vars.lookup(&if runflags.run_interactive {
+                                                   "fn-%interactive-loop"
+                                               } else {
+                                                   "fn-%batch-loop"
+                                               }
+                                               .to_string()) {
+                Some(l) => Err("") /* eval(l) goes here */,
+                None => panic!("Aaaa not implemented yet, will use batchloop prim!"),
             };
 
             Binding::varpop(push);

@@ -18,6 +18,10 @@ impl<T> List<T> {
     pub fn cell(term: T) -> Rc<List<T>> {
         return Rc::new(List::Cons(term, Rc::new(List::Nil)));
     }
+
+    pub fn empty() -> Rc<List<T>> {
+        return Rc::new(List::Nil);
+    }
 }
 
 // allocation and garbage collector support
