@@ -2,7 +2,7 @@
 
 extern crate libc;
 use es::{Es, Flags};
-use var::{Binding, Lookup};
+use var::{Binding, Defn, Lookup};
 use std::rc::Rc;
 use term::Term;
 use list::List;
@@ -355,7 +355,7 @@ impl Input {
 impl Es {
     /// run from an input source
     #[allow(unused_variables)]
-    pub fn runinput(&self, mut inp: Input, runflags: &Flags) -> Rc<List<Term>> {
+    pub fn runinput(&self, mut inp: Input, runflags: &Flags) -> Defn {
 
         let dispatcher = ["fn-%eval-noprint",
                           "fn-%eval-print",
@@ -393,7 +393,6 @@ impl Es {
             Binding::varpop(push);
 
             result
-
         } {
             Err(e) => {
                 // input.cleanup();
@@ -409,7 +408,7 @@ impl Es {
     }
 
     /* runfd -- run commands from a file descriptor */
-    pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Rc<List<Term>> {
+    pub fn runfd(&self, fd: i32, name: Option<String>, runflags: &Flags) -> Defn {
         let inp = Input {
             prev: None,
             /* buf: &0,
@@ -466,7 +465,7 @@ impl Es {
 
 /// run commands from a string
 #[allow(unused_variables)]
-pub fn runstring(s: String, name: Option<String>, flags: Flags) -> Rc<List<Term>> {
+pub fn runstring(s: String, name: Option<String>, flags: Flags) -> Defn {
     Rc::new(List::Nil)
 }
 

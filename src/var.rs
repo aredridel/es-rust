@@ -3,11 +3,13 @@ use term::Term;
 use std::collections::{BTreeSet, HashMap};
 use std::rc::Rc;
 
+pub type Defn = Rc<List<Term>>;
+
 pub struct Binding {
     #[allow(dead_code)]
     name: String,
     #[allow(dead_code)]
-    defn: Rc<List<Term>>,
+    defn: Defn,
     #[allow(dead_code)]
     next: Option<Rc<Binding>>,
 }
@@ -18,7 +20,7 @@ pub struct Push {
     #[allow(dead_code)]
     name: String,
     #[allow(dead_code)]
-    defn: Option<Rc<List<Term>>>,
+    defn: Option<Defn>,
     #[allow(dead_code)]
     flags: Flags, /* ,
                    * nameroot: Root,
@@ -214,7 +216,7 @@ impl Binding {
     // */
 
     #[allow(unused_variables)]
-    pub fn vardef(name: String, binding: Option<Rc<Binding>>, defn: Rc<List<Term>>) {}
+    pub fn vardef(name: String, binding: Option<Rc<Binding>>, defn: Defn) {}
     // /*
     // extern void vardef(char *name, Binding *binding, List *defn) {
     // 	Var *var;
@@ -249,7 +251,7 @@ impl Binding {
     // */
 
     #[allow(unused_variables)]
-    pub fn varpush(name: String, defn: Rc<List<Term>>) -> Push {
+    pub fn varpush(name: String, defn: Defn) -> Push {
         return Push {
             name: name.to_string(),
             next: None,
@@ -503,7 +505,7 @@ impl Binding {
 
 #[allow(dead_code)]
 pub struct Vars {
-    env: HashMap<String, Rc<List<Term>>>,
+    env: HashMap<String, Defn>,
     noexport: BTreeSet<String>,
 }
 
@@ -518,22 +520,22 @@ impl Vars {
 }
 
 pub trait Lookup {
-    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>>;
+    fn lookup(&self, name: &String) -> Option<Defn>;
 
-    fn insert(&mut self, name: String, value: Rc<List<Term>>);
+    fn insert(&mut self, name: String, value: Defn);
 }
 
 impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>> {
+    fn lookup(&self, name: &String) -> Option<Defn> {
         match self.env.get(name) {
             Some(x) => Some(x.clone()),
             None => None,
         }
     }
 
-    fn insert(&mut self, name: String, value: Rc<List<Term>>) {
+    fn insert(&mut self, name: String, value: Defn) {
         self.env.insert(name, value);
     }
 }
@@ -541,10 +543,10 @@ impl Lookup for Vars {
 impl Lookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Option<Rc<List<Term>>> {
+    fn lookup(&self, name: &String) -> Option<Defn> {
         None
     }
 
     #[allow(unused_variables)]
-    fn insert(&mut self, name: String, value: Rc<List<Term>>) {}
+    fn insert(&mut self, name: String, value: Defn) {}
 }
