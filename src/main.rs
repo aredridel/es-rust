@@ -100,7 +100,7 @@ fn main() {
 
     let realopts = match opts.parse(&args[1..]) {
         Ok(m) => m,
-        Err(f) => {
+        Err(_) => {
             b0rk(opts.usage("es [options] [file [args...]]"));
             std::process::exit(1);
         }
