@@ -383,7 +383,7 @@ use std::rc::Rc;
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval(list0: &List<Term>, binding0: Option<Binding>, flags: i32) -> List<Term> {
+pub fn eval(list0: &List, binding0: Option<Binding>, flags: i32) -> List {
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
@@ -496,7 +496,7 @@ pub fn eval(list0: &List<Term>, binding0: Option<Binding>, flags: i32) -> List<T
 
 /// evaluate a term, producing a list
 #[allow(dead_code)]
-pub fn eval1(term: ::term::Term, flags: i32) -> List<Term> {
+pub fn eval1(term: Term, flags: i32) -> List {
     return eval(&List::Cons(term, Rc::new(List::Nil)), None, flags);
 }
 // /*

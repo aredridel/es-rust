@@ -1,9 +1,8 @@
 use list::List;
-use term::Term;
 use std::collections::{BTreeSet, HashMap};
 use std::rc::Rc;
 
-pub type Defn = Rc<List<Term>>;
+pub type Defn = Rc<List>;
 
 pub struct Binding {
     #[allow(dead_code)]
@@ -34,7 +33,7 @@ pub struct Flags {
 
 pub struct Var {
     #[allow(dead_code)]
-    defn: List<Term>,
+    defn: List,
     #[allow(dead_code)]
     flags: Flags,
 }
