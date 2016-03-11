@@ -2,8 +2,11 @@
 
 extern crate libc;
 
+use var::Defn;
+
 pub enum Term {
-    Str(String), // closure: Rc<Closure>
+    Str(String),
+    Prim(fn(Defn) -> Defn), // closure: Rc<Closure>
 }
 
 /* DefineTag(Term, static);
