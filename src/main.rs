@@ -15,6 +15,7 @@ use list::List;
 mod var;
 use var::{Binding, Vars};
 mod term;
+use term::Term;
 mod fd;
 mod input;
 mod status;
@@ -148,16 +149,14 @@ fn main() {
                         std::process::exit(1);
                     }
                     Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                    Binding::vardef("0".to_string(),
-                                    None,
-                                    List::cell(term::Term { str: file.clone() }));
+                    Binding::vardef("0".to_string(), None, List::cell(Term::Str(file.clone())));
                     std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
                 Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                 Binding::vardef("0".to_string(),
                                 None,
-                                List::cell(term::Term { str: std::env::args().nth(0).unwrap() }));
+                                List::cell(Term::Str(std::env::args().nth(0).unwrap())));
 
                 exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

@@ -2,8 +2,8 @@
 
 extern crate libc;
 
-pub struct Term {
-    pub str: String, // closure: Rc<Closure>
+pub enum Term {
+    Str(String), // closure: Rc<Closure>
 }
 
 /* DefineTag(Term, static);
