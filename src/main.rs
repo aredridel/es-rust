@@ -2,27 +2,29 @@
 
 extern crate getopts;
 extern crate libc;
-use getopts::Options;
-use std::io;
-use std::io::Write;
 extern crate errno;
-use std::ffi::CString;
-use errno::errno;
+
 mod es;
-use es::Es;
 mod list;
-use list::List;
 mod var;
-use var::{Binding, Vars};
 mod term;
-use term::Term;
 mod fd;
 mod input;
 mod status;
-use status::exitstatus;
 mod prim;
 mod eval;
 mod initial;
+
+use getopts::Options;
+use std::io;
+use std::io::Write;
+use std::ffi::CString;
+use errno::errno;
+use es::Es;
+use list::List;
+use var::{Binding, Vars};
+use term::Term;
+use status::exitstatus;
 
 /* initpath -- set $path based on the configuration default */
 /* static void initpath(void) {
