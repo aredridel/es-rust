@@ -6,6 +6,7 @@ use var::{Binding, Defn, Lookup};
 use std::rc::Rc;
 use term::Term;
 use list::List;
+use prim;
 
 #[allow(dead_code)]
 static BUFSIZE: i32 = 1024;
@@ -387,7 +388,7 @@ impl Es {
                                                }
                                                .to_string()) {
                 Some(l) => Err("") /* eval(l) goes here */,
-                None => panic!("Aaaa not implemented yet, will use batchloop prim!"),
+                None => Ok(prim::batchloop(&List::Nil))
             };
 
             Binding::varpop(push);

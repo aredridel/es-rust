@@ -3,6 +3,7 @@
 use std::collections::BTreeMap;
 use std::collections::LinkedList;
 use term::Term;
+use list::List;
 
 /* static Dict *prims;
  *
@@ -41,4 +42,11 @@ pub fn initprims() {
      * #define	primdict prims
      * X(primitives);
      * */
+}
+
+#[allow(unused_variables)]
+pub fn batchloop(args: &List) -> List {
+    /* loop {
+     * } */
+    List::Nil
 }

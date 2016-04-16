@@ -6,6 +6,7 @@ use var::Defn;
 
 pub enum Term {
     Str(String),
+    #[allow(dead_code)]
     Prim(fn(Defn) -> Defn), // closure: Rc<Closure>
 }
 
