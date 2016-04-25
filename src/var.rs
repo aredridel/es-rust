@@ -547,5 +547,7 @@ impl Lookup for Binding {
     }
 
     #[allow(unused_variables)]
-    fn insert(&mut self, name: String, value: Defn) {}
+    fn insert(&mut self, name: String, value: Defn) {
+        unimplemented!()
+    }
 }
