@@ -14,6 +14,7 @@ mod status;
 mod prim;
 mod eval;
 mod initial;
+mod parse;
 
 use getopts::Options;
 use std::io;

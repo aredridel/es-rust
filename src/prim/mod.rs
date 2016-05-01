@@ -6,6 +6,8 @@ use term::Term;
 use list::List;
 use es::Es;
 use var::Lookup;
+use eval::eval;
+use parse::Parse;
 
 /* static Dict *prims;
  *
@@ -54,10 +56,25 @@ impl Batchloop for Es {
     #[allow(unused_variables)]
     fn batchloop(&self, args: &List) -> List {
         let dispatch = self.vars.lookup("fn-%dispatch");
-        let cmd = self.vars.lookup("%fn-parse");
+        let parser = self.vars.lookup("%fn-parse");
+        let cmdtail = match parser {
+            Some(p) => eval(p, None, &self.flags),
+            None => self.parse(),
+        };
 
-        /* loop {
-         * } */
-        List::Nil
+        let cmd = match cmdtail {
+            Err(e) => List::Nil,
+            Ok(l) => {
+                match dispatch {
+                    None => l,
+                    Some(d) => d.append(&l),
+                }
+            }
+        };
+
+        match eval(cmd, None, &self.flags) {
+            Ok(l) => l,
+            Err(e) => List::Nil,
+        }
     }
 }

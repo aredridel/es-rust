@@ -22,6 +22,11 @@ impl List {
     pub fn empty() -> Rc<List> {
         return Rc::new(List::Nil);
     }
+
+    #[allow(unused_variables)]
+    pub fn append(&self, tail: &List) -> List {
+        unimplemented!();
+    }
 }
 
 // allocation and garbage collector support
