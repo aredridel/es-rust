@@ -6,7 +6,6 @@ use var::{Binding, Defn, Lookup};
 use std::rc::Rc;
 use term::Term;
 use list::List;
-use prim::Batchloop;
 
 use eval::eval;
 

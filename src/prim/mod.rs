@@ -48,13 +48,9 @@ pub fn initprims() {
      * */
 }
 
-pub trait Batchloop {
-    fn batchloop(&self, args: &List) -> List;
-}
-
-impl Batchloop for Es {
+impl Es {
     #[allow(unused_variables)]
-    fn batchloop(&self, args: &List) -> List {
+    pub fn batchloop(&self, args: &List) -> List {
         let dispatch = self.vars.lookup("fn-%dispatch");
         let parser = self.vars.lookup("%fn-parse");
         let cmdtail = match parser {
