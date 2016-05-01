@@ -519,7 +519,7 @@ impl Vars {
 }
 
 pub trait Lookup {
-    fn lookup(&self, name: &String) -> Option<Defn>;
+    fn lookup(&self, name: &str) -> Option<Defn>;
 
     fn insert(&mut self, name: String, value: Defn);
 }
@@ -527,7 +527,7 @@ pub trait Lookup {
 impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Option<Defn> {
+    fn lookup(&self, name: &str) -> Option<Defn> {
         match self.env.get(name) {
             Some(x) => Some(x.clone()),
             None => None,
@@ -542,7 +542,7 @@ impl Lookup for Vars {
 impl Lookup for Binding {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &String) -> Option<Defn> {
+    fn lookup(&self, name: &str) -> Option<Defn> {
         None
     }
 

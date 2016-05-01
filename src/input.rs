@@ -384,11 +384,10 @@ impl Es {
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
 
             let result = match self.vars.lookup(&if runflags.run_interactive {
-                                                     "fn-%interactive-loop"
-                                                 } else {
-                                                     "fn-%batch-loop"
-                                                 }
-                                                 .to_string()) {
+                "fn-%interactive-loop"
+            } else {
+                "fn-%batch-loop"
+            }) {
                 Some(l) => eval(l, None, runflags),
                 None => Ok(prim::batchloop(&List::Nil)),
             };
