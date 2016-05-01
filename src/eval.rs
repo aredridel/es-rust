@@ -2,6 +2,8 @@ use list::List;
 use term::Term;
 use var::Binding;
 use std::rc::Rc;
+use es::Flags;
+use std::borrow::Borrow;
 // evaluation of lists and trees
 
 // /*
@@ -383,7 +385,10 @@ use std::rc::Rc;
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval(list0: &List, binding0: Option<Binding>, flags: i32) -> List {
+pub fn eval<T: Borrow<List>>(list0: T,
+                             binding0: Option<Binding>,
+                             flags: &Flags)
+                             -> Result<List, &'static str> {
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
@@ -491,12 +496,12 @@ pub fn eval(list0: &List, binding0: Option<Binding>, flags: i32) -> List {
     // 	RefEnd2(funcname, binding);
     // 	RefReturn(list);
     //     */
-    return List::Nil;
+    return Ok(List::Nil);
 }
 
 /// evaluate a term, producing a list
 #[allow(dead_code)]
-pub fn eval1(term: Term, flags: i32) -> List {
+pub fn eval1(term: Term, flags: &Flags) -> Result<List, &'static str> {
     return eval(&List::Cons(term, Rc::new(List::Nil)), None, flags);
 }
 // /*

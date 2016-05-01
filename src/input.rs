@@ -8,6 +8,8 @@ use term::Term;
 use list::List;
 use prim;
 
+use eval::eval;
+
 #[allow(dead_code)]
 static BUFSIZE: i32 = 1024;
 
@@ -382,13 +384,13 @@ impl Es {
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
 
             let result = match self.vars.lookup(&if runflags.run_interactive {
-                                                   "fn-%interactive-loop"
-                                               } else {
-                                                   "fn-%batch-loop"
-                                               }
-                                               .to_string()) {
-                Some(l) => Err("") /* eval(l) goes here */,
-                None => Ok(prim::batchloop(&List::Nil))
+                                                     "fn-%interactive-loop"
+                                                 } else {
+                                                     "fn-%batch-loop"
+                                                 }
+                                                 .to_string()) {
+                Some(l) => eval(l, None, runflags),
+                None => Ok(prim::batchloop(&List::Nil)),
             };
 
             Binding::varpop(push);
