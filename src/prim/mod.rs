@@ -54,7 +54,7 @@ impl Es {
         let dispatch = self.vars.lookup("fn-%dispatch");
         let parser = self.vars.lookup("%fn-parse");
         let cmdtail = match parser {
-            Some(p) => eval(p, None, &self.flags),
+            Some(p) => eval(p, &self.vars, &self.flags),
             None => self.parse(),
         };
 
@@ -68,7 +68,7 @@ impl Es {
             }
         };
 
-        match eval(cmd, None, &self.flags) {
+        match eval(cmd, &self.vars, &self.flags) {
             Ok(l) => l,
             Err(e) => List::Nil,
         }
