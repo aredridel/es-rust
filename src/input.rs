@@ -6,7 +6,7 @@ use var::{Binding, Defn, Lookup};
 use std::rc::Rc;
 use term::Term;
 use list::List;
-use prim;
+use prim::Batchloop;
 
 use eval::eval;
 
@@ -389,7 +389,7 @@ impl Es {
                 "fn-%batch-loop"
             }) {
                 Some(l) => eval(l, None, runflags),
-                None => Ok(prim::batchloop(&List::Nil)),
+                None => Ok(self.batchloop(&List::Nil)),
             };
 
             Binding::varpop(push);

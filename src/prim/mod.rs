@@ -4,6 +4,8 @@ use std::collections::BTreeMap;
 use std::collections::LinkedList;
 use term::Term;
 use list::List;
+use es::Es;
+use var::Lookup;
 
 /* static Dict *prims;
  *
@@ -44,9 +46,18 @@ pub fn initprims() {
      * */
 }
 
-#[allow(unused_variables)]
-pub fn batchloop(args: &List) -> List {
-    /* loop {
-     * } */
-    List::Nil
+pub trait Batchloop {
+    fn batchloop(&self, args: &List) -> List;
+}
+
+impl Batchloop for Es {
+    #[allow(unused_variables)]
+    fn batchloop(&self, args: &List) -> List {
+        let dispatch = self.vars.lookup("fn-%dispatch");
+        let cmd = self.vars.lookup("%fn-parse");
+
+        /* loop {
+         * } */
+        List::Nil
+    }
 }
