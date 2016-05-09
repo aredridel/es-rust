@@ -26,6 +26,7 @@ use list::List;
 use var::{Binding, Vars};
 use term::Term;
 use status::exitstatus;
+use std::rc::Rc;
 
 /* initpath -- set $path based on the configuration default */
 /* static void initpath(void) {
@@ -152,14 +153,18 @@ fn main() {
                         std::process::exit(1);
                     }
                     Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                    Binding::vardef("0".to_string(), None, List::cell(Term::Str(file.clone())));
+                    Binding::vardef("0".to_string(),
+                                    None,
+                                    Rc::new(List::Cons(Term::Str(file.clone()),
+                                                       Rc::new(List::Nil))));
                     std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
                 Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
                 Binding::vardef("0".to_string(),
                                 None,
-                                List::cell(Term::Str(std::env::args().nth(0).unwrap())));
+                                Rc::new(List::Cons(Term::Str(std::env::args().nth(0).unwrap()),
+                                                   Rc::new(List::Nil))));
 
                 exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

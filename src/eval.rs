@@ -393,8 +393,8 @@ pub fn eval<T: Borrow<List>, B: Lookup>(list0: T,
     return Ok(match list0.borrow() {
         &List::Cons(Term::Prim(p), ref rest) => p(binding0, rest),
         &List::Cons(Term::Str(_), ref rest) => List::Nil,
-        &List::Nil => List::Nil
-    })
+        &List::Nil => List::Nil,
+    });
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;

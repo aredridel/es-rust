@@ -12,14 +12,6 @@ pub enum List {
 }
 
 impl List {
-    pub fn cell(term: Term) -> Rc<List> {
-        return Rc::new(List::Cons(term, Rc::new(List::Nil)));
-    }
-
-    pub fn empty() -> Rc<List> {
-        return Rc::new(List::Nil);
-    }
-
     #[allow(unused_variables)]
     pub fn append(&self, tail: &List) -> List {
         unimplemented!();
