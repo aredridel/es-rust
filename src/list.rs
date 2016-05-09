@@ -15,6 +15,28 @@ impl List {
     #[allow(unused_variables)]
     pub fn append(&self, tail: &List) -> List {
         unimplemented!();
+        // // merge two lists, non-destructively
+        // extern List *append(List *head, List *tail) {
+        // 	List *lp, **prevp;
+        // 	Ref(List *, hp, head);
+        // 	Ref(List *, tp, tail);
+        // 	gcreserve(40 * sizeof (List));
+        // 	gcdisable();
+        // 	head = hp;
+        // 	tail = tp;
+        // 	RefEnd2(tp, hp);
+        //
+        // 	for (prevp = &lp; head != NULL; head = head->next) {
+        // 		List *np = mklist(head->term, NULL);
+        // 		*prevp = np;
+        // 		prevp = &np->next;
+        // 	}
+        // 	*prevp = tail;
+        //
+        // 	Ref(List *, result, lp);
+        // 	gcenable();
+        // 	RefReturn(result);
+        // }
     }
 }
 
@@ -52,28 +74,6 @@ impl List {
 // 	return prev;
 // }
 //
-// // merge two lists, non-destructively
-// extern List *append(List *head, List *tail) {
-// 	List *lp, **prevp;
-// 	Ref(List *, hp, head);
-// 	Ref(List *, tp, tail);
-// 	gcreserve(40 * sizeof (List));
-// 	gcdisable();
-// 	head = hp;
-// 	tail = tp;
-// 	RefEnd2(tp, hp);
-//
-// 	for (prevp = &lp; head != NULL; head = head->next) {
-// 		List *np = mklist(head->term, NULL);
-// 		*prevp = np;
-// 		prevp = &np->next;
-// 	}
-// 	*prevp = tail;
-//
-// 	Ref(List *, result, lp);
-// 	gcenable();
-// 	RefReturn(result);
-// }
 //
 // // make a copy of a list
 // extern List *listcopy(List *list) {
