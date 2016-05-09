@@ -1,5 +1,5 @@
 use list::List;
-use var::Lookup;
+use var::Vars;
 use es::Flags;
 use std::borrow::Borrow;
 use term::Term;
@@ -384,10 +384,10 @@ use term::Term;
 
 /// evaluate a list, producing a list
 #[allow(unused_variables)]
-pub fn eval<T: Borrow<List>, B: Lookup>(list0: T,
-                                        binding0: &B,
-                                        flags: &Flags)
-                                        -> Result<List, &'static str> {
+pub fn eval<T: Borrow<List>>(list0: T,
+                             binding0: &Vars,
+                             flags: &Flags)
+                             -> Result<List, &'static str> {
 
     println!("Eval? more like evil");
     return Ok(match list0.borrow() {

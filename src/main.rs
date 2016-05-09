@@ -23,7 +23,7 @@ use std::ffi::CString;
 use errno::errno;
 use es::Es;
 use list::List;
-use var::{Binding, Vars};
+use var::Vars;
 use term::Term;
 use status::exitstatus;
 use std::rc::Rc;
@@ -137,7 +137,7 @@ fn main() {
 
     let result = {
         match Es::new(runflags, Vars::new()) {
-            Ok(es) => {
+            Ok(mut es) => {
                 // roothandler = &_localhandler;	/* unhygeinic */
 
                 if es.flags.cmd.is_none() && !es.flags.cmd_stdin && realopts.free.len() > 0 {
@@ -152,19 +152,17 @@ fn main() {
                         writeln!(stderr, "{}: {}\n", file, errno()).unwrap();
                         std::process::exit(1);
                     }
-                    Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                    Binding::vardef("0".to_string(),
-                                    None,
-                                    Rc::new(List::Cons(Term::Str(file.clone()),
-                                                       Rc::new(List::Nil))));
+                    es.vars.insert("*".to_string(), list::listify(realopts.free.clone()));
+                    es.vars.insert("0".to_string(),
+                                   Rc::new(List::Cons(Term::Str(file.clone()),
+                                                      Rc::new(List::Nil))));
                     std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
-                Binding::vardef("*".to_string(), None, list::listify(realopts.free.clone()));
-                Binding::vardef("0".to_string(),
-                                None,
-                                Rc::new(List::Cons(Term::Str(std::env::args().nth(0).unwrap()),
-                                                   Rc::new(List::Nil))));
+                es.vars.insert("*".to_string(), list::listify(realopts.free.clone()));
+                es.vars.insert("0".to_string(),
+                               Rc::new(List::Cons(Term::Str(std::env::args().nth(0).unwrap()),
+                                                  Rc::new(List::Nil))));
 
                 exitstatus(match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),

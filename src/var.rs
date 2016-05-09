@@ -214,8 +214,6 @@ impl Binding {
     //
     // */
 
-    #[allow(unused_variables)]
-    pub fn vardef(name: String, binding: Option<Rc<Binding>>, defn: Defn) {}
     // /*
     // extern void vardef(char *name, Binding *binding, List *defn) {
     // 	Var *var;
@@ -506,6 +504,7 @@ impl Binding {
 pub struct Vars {
     env: HashMap<String, Defn>,
     noexport: BTreeSet<String>,
+    parent: Option<Rc<Vars>>,
 }
 
 impl Vars {
@@ -514,40 +513,20 @@ impl Vars {
         return Vars {
             env: HashMap::new(),
             noexport: BTreeSet::new(),
+            parent: None,
         };
     }
-}
 
-pub trait Lookup {
-    fn lookup(&self, name: &str) -> Option<Defn>;
-
-    fn insert(&mut self, name: String, value: Defn);
-}
-
-impl Lookup for Vars {
     /// lookup a variable in the current context
     #[allow(unused_variables)]
-    fn lookup(&self, name: &str) -> Option<Defn> {
+    pub fn lookup(&self, name: &str) -> Option<Defn> {
         match self.env.get(name) {
             Some(x) => Some(x.clone()),
             None => None,
         }
     }
 
-    fn insert(&mut self, name: String, value: Defn) {
+    pub fn insert(&mut self, name: String, value: Defn) {
         self.env.insert(name, value);
-    }
-}
-
-impl Lookup for Binding {
-    /// lookup a variable in the current context
-    #[allow(unused_variables)]
-    fn lookup(&self, name: &str) -> Option<Defn> {
-        None
-    }
-
-    #[allow(unused_variables)]
-    fn insert(&mut self, name: String, value: Defn) {
-        unimplemented!()
     }
 }

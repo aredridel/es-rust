@@ -5,7 +5,7 @@ use std::collections::LinkedList;
 use term::Term;
 use list::List;
 use es::Es;
-use var::Lookup;
+use var::Vars;
 use eval::eval;
 use parse::Parse;
 
@@ -76,7 +76,7 @@ impl Es {
 }
 
 #[allow(unused_variables)]
-pub fn echo(vars: &Lookup, args: &List) -> List {
+pub fn echo(vars: &Vars, args: &List) -> List {
     println!("{:?}", args);
     List::Nil
 }

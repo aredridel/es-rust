@@ -2,7 +2,7 @@
 
 extern crate libc;
 use es::{Es, Flags};
-use var::{Binding, Defn, Lookup};
+use var::{Binding, Defn};
 use std::rc::Rc;
 use term::Term;
 use list::List;

@@ -3,13 +3,13 @@
 extern crate libc;
 
 use list::List;
-use var::Lookup;
+use var::Vars;
 
 use std::fmt;
 
 pub enum Term {
     Str(String),
-    Prim(fn(&Lookup, &List) -> List), // closure: Rc<Closure>
+    Prim(fn(&Vars, &List) -> List), // closure: Rc<Closure>
 }
 
 impl fmt::Debug for Term {

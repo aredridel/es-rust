@@ -1,4 +1,4 @@
-use var::{Lookup, Vars};
+use var::Vars;
 use list::List::{Cons, Nil};
 use term::Term::Str;
 use std::rc::Rc;
