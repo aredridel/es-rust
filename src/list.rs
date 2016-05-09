@@ -5,6 +5,7 @@ extern crate libc;
 use term::Term;
 use std::rc::Rc;
 
+#[derive(Debug)]
 pub enum List {
     Cons(Term, Rc<List>),
     Nil,

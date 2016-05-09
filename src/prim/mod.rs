@@ -74,3 +74,9 @@ impl Es {
         }
     }
 }
+
+#[allow(unused_variables)]
+pub fn echo(vars: &Lookup, args: &List) -> List {
+    println!("{:?}", args);
+    List::Nil
+}

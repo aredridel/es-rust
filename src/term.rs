@@ -2,12 +2,23 @@
 
 extern crate libc;
 
-use var::Defn;
+use list::List;
+use var::Lookup;
+
+use std::fmt;
 
 pub enum Term {
     Str(String),
-    #[allow(dead_code)]
-    Prim(fn(Defn) -> Defn), // closure: Rc<Closure>
+    Prim(fn(&Lookup, &List) -> List), // closure: Rc<Closure>
+}
+
+impl fmt::Debug for Term {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            &Term::Str(ref s) => write!(f, "Term::Str(\"{}\")", s),
+            &Term::Prim(_) => write!(f, "Term::Prim(xxx)"),
+        }
+    }
 }
 
 /* DefineTag(Term, static);

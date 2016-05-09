@@ -2,6 +2,7 @@ use list::List;
 use var::Lookup;
 use es::Flags;
 use std::borrow::Borrow;
+use term::Term;
 // evaluation of lists and trees
 
 // /*
@@ -387,6 +388,13 @@ pub fn eval<T: Borrow<List>, B: Lookup>(list0: T,
                                         binding0: &B,
                                         flags: &Flags)
                                         -> Result<List, &'static str> {
+
+    println!("Eval? more like evil");
+    return Ok(match list0.borrow() {
+        &List::Cons(Term::Prim(p), ref rest) => p(binding0, rest),
+        &List::Cons(Term::Str(_), ref rest) => List::Nil,
+        &List::Nil => List::Nil
+    })
     // /*
     // 	Closure *volatile cp;
     // 	List *fn;
@@ -494,5 +502,4 @@ pub fn eval<T: Borrow<List>, B: Lookup>(list0: T,
     // 	RefEnd2(funcname, binding);
     // 	RefReturn(list);
     //     */
-    return Ok(List::Nil);
 }

@@ -1,6 +1,9 @@
 
 use es::Es;
 use list::List;
+use term::Term;
+use std::rc::Rc;
+use prim;
 
 pub trait Parse {
     fn parse(&self) -> Result<List, &'static str>;
@@ -8,6 +11,7 @@ pub trait Parse {
 
 impl Parse for Es {
     fn parse(&self) -> Result<List, &'static str> {
-        Ok::<List, &'static str>(List::Nil)
+        println!("parse");
+        Ok::<List, &'static str>(List::Cons(Term::Prim(prim::echo), Rc::new(List::Nil)))
     }
 }
