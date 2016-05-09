@@ -12,10 +12,6 @@ pub enum List {
 }
 
 impl List {
-    pub fn cons(term: Term, l: Rc<List>) -> Rc<List> {
-        return Rc::new(List::Cons(term, l));
-    }
-
     pub fn cell(term: Term) -> Rc<List> {
         return Rc::new(List::Cons(term, Rc::new(List::Nil)));
     }

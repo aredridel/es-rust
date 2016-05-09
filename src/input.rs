@@ -377,7 +377,7 @@ impl Es {
             };
 
             if runflags.eval_exitonfalse {
-                dispatch = List::cons(Term::Str("%exit-on-false".to_string()), dispatch);
+                dispatch = Rc::new(List::Cons(Term::Str("%exit-on-false".to_string()), dispatch));
             }
 
             let push = Binding::varpush("fn-%dispatch".to_string(), dispatch);
