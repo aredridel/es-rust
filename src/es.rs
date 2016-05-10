@@ -8,6 +8,7 @@ use errno::errno;
 use libc::c_int;
 use fd;
 use prim;
+use prim::Prims;
 use initial::runinitial;
 
 pub struct Flags {
@@ -70,6 +71,7 @@ pub struct Es {
     #[allow(dead_code)]
     pub flags: Flags,
     pub vars: Vars,
+    pub prims: Prims,
 }
 
 impl Es {
@@ -89,6 +91,7 @@ impl Es {
         let es = Es {
             flags: f,
             vars: vars,
+            prims: prim::initprims(),
         };
 
         /* initpath();
@@ -102,7 +105,6 @@ impl Es {
             // runesrc();
         }
 
-        prim::initprims();
 
         return Ok(es);
     }

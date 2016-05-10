@@ -2,21 +2,18 @@
 
 extern crate libc;
 
-use list::List;
-use var::Vars;
-
 use std::fmt;
 
 pub enum Term {
     Str(String),
-    Prim(fn(&Vars, &List) -> List), // closure: Rc<Closure>
+    Prim(String), // closure: Rc<Closure>
 }
 
 impl fmt::Debug for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             &Term::Str(ref s) => write!(f, "Term::Str(\"{}\")", s),
-            &Term::Prim(_) => write!(f, "Term::Prim(xxx)"),
+            &Term::Prim(ref p) => write!(f, "Term::Prim({})", p),
         }
     }
 }

@@ -387,7 +387,7 @@ impl Es {
             } else {
                 "fn-%batch-loop"
             }) {
-                Some(l) => eval(l, &self.vars, runflags),
+                Some(l) => eval(l, &self.vars, &self.prims, runflags),
                 None => Ok(self.batchloop(&List::Nil)),
             };
 

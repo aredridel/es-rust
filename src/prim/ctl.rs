@@ -1,15 +1,16 @@
 /* prim-ctl.rs -- control flow primitives */
-use std::collections::BTreeMap;
-use std::collections::LinkedList;
-use term::Term;
+use list::List;
+use list::List::Nil;
+use var::Vars;
+use prim::Prims;
 
 #[allow(unused_variables)]
-fn seq(lp: &LinkedList<Term> /* , binding: &Binding, evalflags: int */) -> LinkedList<Term> {
-    return LinkedList::new();
+fn seq(vars: &Vars, lp: &List /* , binding: &Binding, evalflags: int */) -> List {
+    return Nil;
 }
 
 #[allow(unused_variables)]
-fn _if(lp: &LinkedList<Term>) -> LinkedList<Term> {
+fn _if(vars: &Vars, lp: &List) -> List {
     /* Ref(List *, lp, list);
      * for (; lp != NULL; lp = lp->next) {
      * List *cond = eval1(lp->term, evalflags & (lp->next == NULL ? eval_inchild : 0));
@@ -27,32 +28,32 @@ fn _if(lp: &LinkedList<Term>) -> LinkedList<Term> {
      * RefEnd(lp);
      * return true;
      * */
-    return LinkedList::new();
+    return Nil;
 }
 
 #[allow(unused_variables)]
-fn forever(lp: &LinkedList<Term>) -> LinkedList<Term> {
+fn forever(vars: &Vars, lp: &List) -> List {
     /* Ref(List *, body, list);
      * for (;;)
      * list = eval(body, NULL, evalflags & eval_exitonfalse);
      * RefEnd(body);
      * return list;
      * */
-    return LinkedList::new();
+    return Nil;
 }
 
 #[allow(unused_variables)]
-fn throw(lp: &LinkedList<Term>) -> LinkedList<Term> {
+fn throw(vars: &Vars, lp: &List) -> List {
     /* if (list == NULL)
      * fail("$&throw", "usage: throw exception [args ...]");
      * throw(list);
      * NOTREACHED;
      * */
-    return LinkedList::new();
+    return Nil;
 }
 
 #[allow(unused_variables)]
-fn catch(lp: &LinkedList<Term>) -> LinkedList<Term> {
+fn catch(vars: &Vars, lp: &List) -> List {
     /* Atomic retry;
      *
      * if (list == NULL)
@@ -96,11 +97,10 @@ fn catch(lp: &LinkedList<Term>) -> LinkedList<Term> {
      * RefEnd(lp);
      * RefReturn(result);
      * */
-    return LinkedList::new();
+    return Nil;
 }
 
-pub fn initprims_controlflow(prims: &mut BTreeMap<String,
-                                                  fn(&LinkedList<Term>) -> LinkedList<Term>>) {
+pub fn initprims_controlflow(prims: &mut Prims) {
     prims.insert("seq".to_string(), seq);
     prims.insert("if".to_string(), _if);
     prims.insert("throw".to_string(), throw);

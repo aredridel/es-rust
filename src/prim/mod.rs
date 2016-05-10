@@ -1,8 +1,6 @@
 /* prim.c -- primitives and primitive dispatching ($Revision: 1.1.1.1 $) */
 
-use std::collections::BTreeMap;
-use std::collections::LinkedList;
-use term::Term;
+use std::collections::HashMap;
 use list::List;
 use es::Es;
 use var::Vars;
@@ -34,9 +32,12 @@ use parse::Parse;
 
 mod ctl;
 
-pub fn initprims() {
-    let mut prims: BTreeMap<String, fn(&LinkedList<Term>) -> LinkedList<Term>> = BTreeMap::new();
+pub type Prims = HashMap<String, fn(&Vars, &List) -> List>;
+
+pub fn initprims() -> Prims {
+    let mut prims: Prims = HashMap::new();
     ctl::initprims_controlflow(&mut prims);
+    prims.insert("echo".to_string(), echo);
     /* prims = initprims_io(prims);
      * prims = initprims_etc(prims);
      * prims = initprims_sys(prims);
@@ -46,6 +47,7 @@ pub fn initprims() {
      * #define	primdict prims
      * X(primitives);
      * */
+    prims
 }
 
 impl Es {
@@ -54,7 +56,7 @@ impl Es {
         let dispatch = self.vars.lookup("fn-%dispatch");
         let parser = self.vars.lookup("%fn-parse");
         let cmdtail = match parser {
-            Some(p) => eval(p, &self.vars, &self.flags),
+            Some(p) => eval(p, &self.vars, &self.prims, &self.flags),
             None => self.parse(),
         };
 
@@ -68,7 +70,7 @@ impl Es {
             }
         };
 
-        match eval(cmd, &self.vars, &self.flags) {
+        match eval(cmd, &self.vars, &self.prims, &self.flags) {
             Ok(l) => l,
             Err(e) => List::Nil,
         }
