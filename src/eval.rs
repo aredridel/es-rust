@@ -391,7 +391,6 @@ pub fn eval<T: Borrow<List>>(list0: T,
                              flags: &Flags)
                              -> Result<List, &'static str> {
 
-    println!("Eval? more like evil");
     return Ok(match list0.borrow() {
         &List::Cons(Term::Prim(ref p), ref rest) => prims.get(p).unwrap()(binding0, rest),
         &List::Cons(Term::Str(_), ref rest) => List::Nil,
