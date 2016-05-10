@@ -12,8 +12,8 @@ pub enum Term {
 impl fmt::Debug for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            &Term::Str(ref s) => write!(f, "Term::Str(\"{}\")", s),
-            &Term::Prim(ref p) => write!(f, "Term::Prim({})", p),
+            &Term::Str(ref s) => write!(f, "\"{}\"", s),
+            &Term::Prim(ref p) => write!(f, "$&{}", p),
         }
     }
 }

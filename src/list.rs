@@ -4,11 +4,20 @@ extern crate libc;
 
 use term::Term;
 use std::rc::Rc;
+use std::fmt;
 
-#[derive(Debug)]
 pub enum List {
     Cons(Term, Rc<List>),
     Nil,
+}
+
+impl fmt::Debug for List {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            &List::Cons(ref head, ref rest) => write!(f, "{:?} {:?}", head, rest),
+            &List::Nil => write!(f, ""),
+        }
+    }
 }
 
 impl List {

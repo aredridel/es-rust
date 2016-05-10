@@ -37,7 +37,7 @@ pub type Prims = HashMap<String, fn(&Vars, &List) -> List>;
 pub fn initprims() -> Prims {
     let mut prims: Prims = HashMap::new();
     ctl::initprims_controlflow(&mut prims);
-    prims.insert("echo".to_string(), echo);
+    prims.insert("debug".to_string(), debug);
     /* prims = initprims_io(prims);
      * prims = initprims_etc(prims);
      * prims = initprims_sys(prims);
@@ -78,7 +78,7 @@ impl Es {
 }
 
 #[allow(unused_variables)]
-pub fn echo(vars: &Vars, args: &List) -> List {
+pub fn debug(vars: &Vars, args: &List) -> List {
     println!("{:?}", args);
     List::Nil
 }

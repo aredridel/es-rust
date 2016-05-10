@@ -2,7 +2,7 @@
 use es::Es;
 use list::List::{Cons, Nil};
 use list::List;
-use term::Term::Prim;
+use term::Term::{Prim, Str};
 use std::rc::Rc;
 
 pub trait Parse {
@@ -12,7 +12,10 @@ pub trait Parse {
 impl Parse for Es {
     fn parse(&self) -> Result<List, &'static str> {
         println!("parse");
-        Ok::<List, &'static str>(Cons(Prim("echo".to_string()),
-                                      Rc::new(Cons(Prim("echo".to_string()), Rc::new(Nil)))))
+        Ok::<List, &'static str>(Cons(Prim("debug".to_string()),
+                                      Rc::new(Cons(Prim("debug".to_string()),
+                                                   Rc::new(Cons(Str("hello, world!"
+                                                                        .to_string()),
+                                                                Rc::new(Nil)))))))
     }
 }
