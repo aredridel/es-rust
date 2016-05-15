@@ -12,10 +12,8 @@ pub trait Parse {
 impl Parse for Es {
     fn parse(&self) -> Result<List, &'static str> {
         println!("parse");
-        Ok::<List, &'static str>(Cons(Prim("debug".to_string()),
-                                      Rc::new(Cons(Prim("debug".to_string()),
-                                                   Rc::new(Cons(Str("hello, world!"
-                                                                        .to_string()),
-                                                                Rc::new(Nil)))))))
+        Ok(Cons(Prim("debug".to_string()),
+                Rc::new(Cons(Prim("debug".to_string()),
+                             Rc::new(Cons(Str("hello, world!".to_string()), Rc::new(Nil)))))))
     }
 }
