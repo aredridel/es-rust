@@ -156,7 +156,7 @@ fn main() {
                     es.vars.insert("0".to_string(),
                                    Rc::new(List::Cons(Term::Str(file.clone()),
                                                       Rc::new(List::Nil))));
-                    std::process::exit(exitstatus(es.runfd(fd, Some(file.clone()), &es.flags)));
+                    std::process::exit(exitstatus(&es.runfd(fd, Some(file.clone()), &es.flags)));
                 }
 
                 es.vars.insert("*".to_string(), list::listify(realopts.free.clone()));
@@ -164,7 +164,7 @@ fn main() {
                                Rc::new(List::Cons(Term::Str(std::env::args().nth(0).unwrap()),
                                                   Rc::new(List::Nil))));
 
-                exitstatus(match es.flags.cmd.clone() {
+                exitstatus(&match es.flags.cmd.clone() {
                     Some(cmd) => input::runstring(cmd, None, es.flags),
                     None => es.runfd(0, Some("stdin".to_string()), &es.flags),
                 })
