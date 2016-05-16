@@ -56,7 +56,7 @@ impl Es {
         let parser = self.vars.lookup("%fn-parse");
         let cmdtail = match parser {
             Some(p) => eval(p, &self.vars, &self.prims, &self.flags),
-            None => self.parse(),
+            None => self.parse("$&debug Hello, World"),
         };
 
         let cmd = match cmdtail {
