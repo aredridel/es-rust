@@ -5,7 +5,6 @@ use list::List;
 use es::Es;
 use var::Vars;
 use eval::eval;
-use parse::Parse;
 
 /* static Dict *prims;
  *

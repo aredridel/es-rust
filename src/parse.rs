@@ -5,12 +5,8 @@ use list::List;
 use term::Term::{Prim, Str};
 use std::rc::Rc;
 
-pub trait Parse {
-    fn parse(&self) -> Result<List, &'static str>;
-}
-
-impl Parse for Es {
-    fn parse(&self) -> Result<List, &'static str> {
+impl Es {
+    pub fn parse(&self) -> Result<List, &'static str> {
         println!("parse");
         Ok(Cons(Prim("debug".to_string()),
                 Rc::new(Cons(Prim("debug".to_string()),
