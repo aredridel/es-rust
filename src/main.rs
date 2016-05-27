@@ -3,6 +3,7 @@
 extern crate getopts;
 extern crate libc;
 extern crate errno;
+extern crate combine;
 
 mod es;
 mod list;

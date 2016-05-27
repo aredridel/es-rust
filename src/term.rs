@@ -4,6 +4,7 @@ extern crate libc;
 
 use std::fmt;
 
+#[derive(Clone, PartialEq)]
 pub enum Term {
     Str(String),
     Prim(String), // closure: Rc<Closure>

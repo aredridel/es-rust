@@ -8,3 +8,4 @@ authors = ["Aria Stewart <aredridel@nbtsc.org>"]
 errno = "^0.1.5"
 getopts = "^0.2.14"
 libc = "^0.2.4"
+combine = "^1.3.0"
