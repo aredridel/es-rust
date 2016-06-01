@@ -1,9 +1,8 @@
 use es::Es;
 use list::List;
 use term::Term;
-use list::List::{Cons, Nil};
+use list::List::{Cell, Nil};
 use term::Term::{Prim, Str};
-use std::rc::Rc;
 use combine::{ParseResult, Parser, ParserExt, any, many1, not_followed_by, parser, string, token};
 use combine::primitives::{State, Stream};
 
@@ -38,7 +37,7 @@ fn simple<I>(input: State<I>) -> ParseResult<List, I>
 fn first<I>(input: State<I>) -> ParseResult<List, I>
     where I: Stream<Item = char>
 {
-    parser(comword).parse_state(input).map(|(a, b)| (Cons(a, Rc::new(Nil)), b))
+    parser(comword).parse_state(input).map(|(a, b)| (Cell(a), b))
 }
 
 fn comword<I>(input: State<I>) -> ParseResult<Term, I>

@@ -9,6 +9,7 @@ use std::fmt;
 #[derive(Clone)]
 pub enum List {
     Cons(Term, Rc<List>),
+    Cell(Term),
     Nil,
 }
 
@@ -16,6 +17,7 @@ impl fmt::Debug for List {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             &List::Cons(ref head, ref rest) => write!(f, "{:?} {:?}", head, rest),
+            &List::Cell(ref head) => write!(f, "{:?}", head),
             &List::Nil => write!(f, "nil"),
         }
     }
