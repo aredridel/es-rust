@@ -47,15 +47,15 @@ fn first<I>(input: State<I>) -> ParseResult<List, I>
 fn comword<I>(input: State<I>) -> ParseResult<Term, I>
     where I: Stream<Item = char>
 {
-    not_followed_by(string("for").or(string("local")).or(string("let")).or(string("fn")))
-        .with(parser(param).or((token('$'), token('&'), many1::<Vec<_>, _>(alpha_num())).map(|e| Str("blah".to_string()))))
+    parser(param).or((token('$'), token('&'), many1::<Vec<_>, _>(alpha_num())).map(|e| Str("blah".to_string())))
         .parse_lazy(input)
 }
 
 fn param<I>(input: State<I>) -> ParseResult<Term, I>
     where I: Stream<Item = char>
 {
-    (token('$'), token('&'), many1(alpha_num())).map(|e| Prim(e.2)).parse_state(input)
+    not_followed_by(string("for").or(string("local")).or(string("let")).or(string("fn")))
+        .with((token('$'), token('&'), many1(alpha_num())).map(|e| Prim(e.2))).parse_lazy(input)
 }
 
 
